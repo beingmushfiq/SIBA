@@ -71,7 +71,7 @@ SIBA follows a **Decoupled Monolith** architecture pattern, separating concerns 
 # ⚙️ Installation & Setup
 
 ### Prerequisites
-- **PHP** >= 8.2
+- **PHP** >= 8.4php -m | findstr opensslphp -m | findstr openssl
 - **Node.js** >= 18.x
 - **Composer** (PHP dependency manager)
 - **Web Server** (Nginx/Apache) or Laragon for local development
