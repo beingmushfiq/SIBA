@@ -176,4 +176,3 @@ Distributable under the **MIT License**.
 # 📬 Contact
 **Sherazi IT Business Academy**  
 *Strategic IT Integration & Scalable Growth*  
-[www.siba-academy.com](https://siba-academy.com) | support@siba-academy.com
