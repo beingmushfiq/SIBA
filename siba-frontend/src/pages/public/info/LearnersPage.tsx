@@ -1,31 +1,32 @@
 import { Users, TrendingUp, Award, Globe, MessageSquare, Sparkles, ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const stats = [
   { icon: Globe, label: "Operational Hubs", value: "45+" },
-  { icon: Users, label: "Elite Operatives", value: "12K+" },
-  { icon: Award, label: "Verified Diplomas", value: "3.5K+" },
-  { icon: TrendingUp, label: "Ecosystem Value", value: "$4.2M+" },
+  { icon: Users, label: "Elite Operatives", value: "15K+" },
+  { icon: Award, label: "Verified Diplomas", value: "4.2K+" },
+  { icon: TrendingUp, label: "Ecosystem Value", value: "$6.8M+" },
 ];
 
 const testimonials = [
   {
-    name: "Alex Johnson",
-    role: "Agency Architect",
-    content: "SIBA didn&apos;t just teach me how to code; they taught me how to architect autonomic lead engines. My throughput tripled in 120 days.",
-    avatar: "https://i.pravatar.cc/200?u=alex",
+    name: "Nadia Khan",
+    role: "Full-Stack Engineer",
+    content: "SIBA's curriculum bridged the gap between basic coding and enterprise-grade deployment. I now architect autonomous lead systems for global clients.",
+    avatar: "https://i.pravatar.cc/200?u=nadia",
     tag: "Autonomic Systems"
   },
   {
-    name: "Rina Chen",
-    role: "Legacy Specialist",
-    content: "The certificate verification protocol is the gold standard. My current employer initiated the hire within 15 minutes of verifying my ledger signature.",
-    avatar: "https://i.pravatar.cc/200?u=rina",
+    name: "Farhan Ali",
+    role: "Digital Specialist",
+    content: "The certificate verification protocol is the absolute gold standard. My proficiency was validated instantly, leading to my current lead role.",
+    avatar: "https://i.pravatar.cc/200?u=farhan",
     tag: "Credential Authority"
   },
   {
     name: "Omar K.",
-    role: "Strategic Partner",
-    content: "The board mentorship changed my entire trajectory. Having Rahat guide my infrastructural launch was the highest ROI decision I&apos;ve made.",
+    role: "Sovereign Architect",
+    content: "The board mentorship changed my entire trajectory. Having Rahat guide my infrastructural launch was the highest ROI decision I've made.",
     avatar: "https://i.pravatar.cc/200?u=omar",
     tag: "Infrastructural Growth"
   }
@@ -98,6 +99,33 @@ export default function LearnersPage() {
            </div>
         </section>
 
+        {/* HALL OF ACHIEVERS */}
+        <section className="mt-32 space-y-16">
+           <div className="text-center space-y-4">
+              <h2 className="text-[10px] font-black uppercase tracking-[0.5em] text-[var(--text-muted)]">Elite Network</h2>
+              <h3 className="text-4xl md:text-6xl font-black tracking-tighter">Hall of <span className="gradient-text">Achievers.</span></h3>
+           </div>
+
+           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+              {[
+                { name: "Sajib Ahmed", outcome: "3x Revenue Growth", hub: "Dhaka Hub" },
+                { name: "Merin Jahan", outcome: "Automated SaaS Launch", hub: "Chittagong Hub" },
+                { name: "Tanvir S.", outcome: "Enterprise Migration", hub: "Dubai Hub" },
+                { name: "Elena R.", outcome: "Scale to $100K/mo", hub: "London Hub" },
+                { name: "Arif Hossain", outcome: "Lead Engine Architect", hub: "Toronto Hub" },
+                { name: "Zubair M.", outcome: "Systemic Optimization", hub: "Singapore Hub" },
+                { name: "Nadia Khan", outcome: "Autonomic Infrastructure", hub: "New York Hub" },
+                { name: "Farhan Ali", outcome: "Market Dominance", hub: "Sylhet Hub" }
+              ].map((achiever, i) => (
+                <div key={i} className="glass-card p-8 group hover:border-[var(--brand-500)]/40 transition-all">
+                   <div className="text-[10px] font-black text-[var(--brand-500)] mb-3 tracking-widest">{achiever.outcome}</div>
+                   <div className="text-lg font-black text-[var(--text-primary)] mb-1">{achiever.name}</div>
+                   <div className="text-[9px] font-black text-[var(--text-muted)] uppercase tracking-widest opacity-60">{achiever.hub}</div>
+                </div>
+              ))}
+           </div>
+        </section>
+
         {/* CTA SECTION */}
         <section className="mt-24 relative group overflow-hidden rounded-[3rem] border border-[var(--border-primary)]">
            <div className="absolute inset-0 bg-[var(--bg-secondary)] group-hover:bg-[var(--bg-tertiary)] transition-colors duration-700" />
@@ -118,10 +146,13 @@ export default function LearnersPage() {
                 </p>
               </div>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
-                <button className="h-20 px-16 rounded-3xl bg-[var(--brand-500)] text-white text-[11px] font-black uppercase tracking-[0.3em] shadow-2xl shadow-brand/20 hover:scale-[1.05] active:scale-95 transition-all flex items-center justify-center gap-3">
+                <Link 
+                  to="/register"
+                  className="h-20 px-16 rounded-3xl bg-[var(--brand-500)] text-white text-[11px] font-black uppercase tracking-[0.3em] shadow-2xl shadow-brand/20 hover:scale-[1.05] active:scale-95 transition-all flex items-center justify-center gap-3"
+                >
                     Initiate Authority Request
                     <ArrowRight className="w-4 h-4" />
-                </button>
+                </Link>
               </div>
            </div>
         </section>

@@ -2,7 +2,7 @@
 ### Modernizing professional systems through elite IT integration and scalable business architectures.
 
 [![Build Status](https://img.shields.io/badge/build-passing-brightgreen)](#)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](#)
+[![PWA](https://img.shields.io/badge/PWA-Certified-emerald)](#)
 [![Frontend](https://img.shields.io/badge/frontend-React%2018-blue)](#)
 [![Backend](https://img.shields.io/badge/backend-Laravel%2011-red)](#)
 [![Stability](https://img.shields.io/badge/stability-production--ready-orange)](#)
@@ -18,19 +18,20 @@ The system addresses the fundamental fragmentation in professional training by u
 
 # 🚀 Key Features
 
-### 🎓 Learner Experience
-- **Fluid Enrollment**: Seamless registration and onboarding into high-performance curriculum tracks.
-- **Dynamic Catalog**: Interactive course exploration with category filtering and detailed syllabus previews.
+### 🎓 Learner Experience & Hall of Fame
+- **The Global Tribe**: A dedicated learners portal featuring verified success stories and high-performance testimonials.
+- **Hall of Achievers**: Real-world impact tracking across global hubs (London, Dubai, New York, etc.).
 - **Progress Synchronization**: Real-time tracking of learning milestones and achievement logs.
 
-### 👨‍🏫 Mentor & Instruction
-- **Portfolio Management**: Tools for mentors to highlight expertise and manage their instructional presence.
-- **Engagement Oversight**: Dashboards for tracking student success and interaction metrics.
+### 👨‍🏫 Architects Council (Mentors)
+- **Direct Engagement**: Streamlined "Contact via WhatsApp" protocol for immediate expert situational guidance.
+- **Practitioner Led**: Not academics — all mentors are high-performance operators currently scaling real infrastructures.
+- **Impact Metrics**: Public transparency of mentor performance, including student reach and benchmark ratings.
 
-### 🛡️ Administrative Control
+### 🛡️ Administrative Control & Verification
 - **RBAC Infrastructure**: Granite-tight Role-Based Access Control for Students, Mentors, and Administrators.
-- **Certificate Governance**: Automated issuance system with cryptographically unique serial number assignment.
-- **Financial Registry**: Oversight of academy access and revenue engine monitoring.
+- **Cryptographic Proof**: Automated issuance of certificates with immutable, searchable serial numbers.
+- **Richer PWA Interface**: Full Progressive Web App support with a custom high-fidelity install UI, offline navigation, and mobile-native look.
 
 ### 💎 Core System Capabilities
 - **Public Verification**: A high-trust, serial-based certificate verification engine for global credential validation.
@@ -52,9 +53,10 @@ SIBA follows a **Decoupled Monolith** architecture pattern, separating concerns 
 # 🛠️ Tech Stack
 
 ### Frontend
-- **Core**: React 18, TypeScript, Vite
-- **Styling**: Tailwind CSS (v4 Architecture), Lucide React Icons
-- **State/Data**: TanStack Query (React Query), Zustand, Axios
+- **Core**: React 18, TypeScript, Vite 8
+- **PWA**: `vite-plugin-pwa` with Rich Install UI and Service Worker integration
+- **Styling**: Tailwind CSS (v4), Lucide React Icons
+- **State/Data**: TanStack Query, Zustand, Axios
 - **Animation**: Framer Motion, CSS Mesh Gradients
 
 ### Backend
@@ -71,7 +73,7 @@ SIBA follows a **Decoupled Monolith** architecture pattern, separating concerns 
 # ⚙️ Installation & Setup
 
 ### Prerequisites
-- **PHP** >= 8.4php -m | findstr opensslphp -m | findstr openssl
+- **PHP** >= 8.2
 - **Node.js** >= 18.x
 - **Composer** (PHP dependency manager)
 - **Web Server** (Nginx/Apache) or Laragon for local development
@@ -98,7 +100,7 @@ SIBA follows a **Decoupled Monolith** architecture pattern, separating concerns 
 3. **Frontend Configuration**
    ```bash
    cd ../siba-frontend
-   npm install
+   npm install --legacy-peer-deps
    cp .env.example .env
    npm run dev
    ```
@@ -148,23 +150,23 @@ Auth: **Bearer Token (JWT)**
 # 📁 Project Structure
 ```text
 ├── siba-api/               # Laravel Backend Engine
-│   ├── app/                # Core Logic (Models, Middleware)
+│   ├── app/                # Models & Controllers
 │   ├── routes/             # API Endpoints
 │   └── database/           # Migrations & Seeders
 ├── siba-frontend/          # React Single Page App
 │   ├── src/
-│   │   ├── components/     # Atomic UI System (UI, Layout)
-│   │   ├── pages/          # Layout & View Layer
-│   │   └── store/          # Global State (Zustand)
+│   │   ├── components/     # UI System & Atomic Layouts
+│   │   ├── pages/          # View Layer (Public/Protected)
+│   │   └── lib/            # Utilities (Axios, PWA handlers)
 └── README.md
 ```
 
 ---
 
 # 🛡️ Security Practices
-- **Middleware Guarding**: Every protected route is sanitized through `CheckRole` and `JWT.auth` layers.
-- **Data Protection**: Inputs are sanitized against SQLi and XSS; sensitive keys are restricted to `.env`.
-- **Validation**: Strict TypeScript definitions and Symfony-powered backend validation.
+- **Middleware Guarding**: Protected routes sanitized through `CheckRole` and `JWT.auth`.
+- **Cryptographic Validation**: Public certificates verified against unique ledger signatures.
+- **PWA Integrity**: Validated icons, manifest, and screenshots for secure installation.
 
 ---
 

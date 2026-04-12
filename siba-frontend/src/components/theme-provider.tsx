@@ -15,7 +15,7 @@ interface ThemeProviderState {
 }
 
 const initialState: ThemeProviderState = {
-  theme: "system",
+  theme: "light",
   setTheme: () => null,
   toggleTheme: () => null,
 };
@@ -24,7 +24,7 @@ export const ThemeProviderContext = React.createContext<ThemeProviderState>(init
 
 export function ThemeProvider({
   children,
-  defaultTheme = "system",
+  defaultTheme = "light",
   storageKey = "siba-theme",
   ...props
 }: ThemeProviderProps) {
