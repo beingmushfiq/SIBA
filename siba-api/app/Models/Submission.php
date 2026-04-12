@@ -1,0 +1,15 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Submission extends Model
+{
+    public $incrementing = false;
+    protected $keyType = 'string';
+    protected $fillable = ['id', 'content', 'file_url', 'score', 'feedback', 'status', 'task_id', 'user_id', 'reviewed_at'];
+    protected function casts(): array { return ['reviewed_at' => 'datetime']; }
+    public function task() { return $this->belongsTo(Task::class, 'task_id'); }
+    public function user() { return $this->belongsTo(User::class, 'user_id'); }
+}
