@@ -26,7 +26,7 @@ The system addresses the fundamental fragmentation in professional training by u
 ### 👨‍🏫 Architects Council (Mentors)
 - **Direct Engagement**: Streamlined "Contact via WhatsApp" protocol for immediate expert situational guidance.
 - **Practitioner Led**: Not academics — all mentors are high-performance operators currently scaling real infrastructures.
-- **Impact Metrics**: Public transparency of mentor performance, including student reach and benchmark ratings.
+- **Sovereign Authority**: Direct integration of practitioner expertise into the learning flow, prioritizing execution over theory.
 
 ### 🛡️ Administrative Control & Verification
 - **RBAC Infrastructure**: Granite-tight Role-Based Access Control for Students, Mentors, and Administrators.
@@ -82,7 +82,7 @@ SIBA follows a **Decoupled Monolith** architecture pattern, separating concerns 
 
 1. **Clone the Repository**
    ```bash
-   git clone https://github.com/beingmushfiq/siba.git
+   git clone https://github.com/Sherazi-IT-Ltd/SIBA.git
    cd siba
    ```
 
@@ -125,7 +125,7 @@ SIBA follows a **Decoupled Monolith** architecture pattern, separating concerns 
 
 ### Default Access (Seeded)
 - **Admin**: `admin@siba.academy` / `password`
-- **Trainer**: `sarah@siba.academy` / `password`
+- **Industry Expert**: `sarah@siba.academy` / `password`
 - **Student**: `nadia@student.siba.academy` / `password`
 
 ### Workflows
