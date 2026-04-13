@@ -23,185 +23,165 @@ class DatabaseSeeder extends Seeder
         // ─── USERS ──────────────────────────────────────────────
         $admin = User::create([
             'id' => $this->cuid(),
-            'name' => 'Admin User',
+            'name' => 'Md. Ismail Hossain Sherazi',
             'email' => 'admin@siba.academy',
             'password' => 'password',
             'role' => 'ADMIN',
             'level' => 'EXPERT',
         ]);
 
-        $trainer1 = User::create([
+        $trainer = User::create([
             'id' => $this->cuid(),
-            'name' => 'Sarah Ahmed',
-            'email' => 'sarah@siba.academy',
+            'name' => 'Modern Business Development Architects',
+            'email' => 'ismail@siba.academy',
             'password' => 'password',
             'role' => 'TRAINER',
-            'bio' => 'Full-stack developer with 8 years of experience in web technologies.',
-            'level' => 'EXPERT',
-        ]);
-
-        $trainer2 = User::create([
-            'id' => $this->cuid(),
-            'name' => 'Karim Hassan',
-            'email' => 'karim@siba.academy',
-            'password' => 'password',
-            'role' => 'TRAINER',
-            'bio' => 'Digital marketing strategist specializing in growth hacking and SEO.',
-            'level' => 'ADVANCED',
-        ]);
-
-        $student1 = User::create([
-            'id' => $this->cuid(),
-            'name' => 'Nadia Khan',
-            'email' => 'nadia@student.siba.academy',
-            'password' => 'password',
-            'role' => 'STUDENT',
-        ]);
-
-        $student2 = User::create([
-            'id' => $this->cuid(),
-            'name' => 'Farhan Ali',
-            'email' => 'farhan@student.siba.academy',
-            'password' => 'password',
-            'role' => 'STUDENT',
-        ]);
-
-        $mentor = User::create([
-            'id' => $this->cuid(),
-            'name' => 'Dr. Ayesha Malik',
-            'email' => 'ayesha@siba.academy',
-            'password' => 'password',
-            'role' => 'MENTOR',
-            'bio' => 'PhD in Computer Science, 15 years mentoring startup founders.',
+            'bio' => 'Founder and Owner, SIBA Academy. Architecting radical transformations in business through automation.',
             'level' => 'EXPERT',
         ]);
 
         // ─── CATEGORIES ─────────────────────────────────────────
-        $catDev = Category::create(['id' => $this->cuid(), 'name' => 'Web Development', 'icon' => 'Code', 'color' => '#6366f1']);
-        $catBiz = Category::create(['id' => $this->cuid(), 'name' => 'Business', 'icon' => 'Briefcase', 'color' => '#10b981']);
-        $catMkt = Category::create(['id' => $this->cuid(), 'name' => 'Digital Marketing', 'icon' => 'TrendingUp', 'color' => '#f59e0b']);
-        $catAI  = Category::create(['id' => $this->cuid(), 'name' => 'AI & Machine Learning', 'icon' => 'Brain', 'color' => '#8b5cf6']);
+        $catBiz = Category::create(['id' => $this->cuid(), 'name' => 'Business Strategy', 'icon' => 'Briefcase', 'color' => '#10b981']);
+        $catAuto = Category::create(['id' => $this->cuid(), 'name' => 'Automation', 'icon' => 'Zap', 'color' => '#6366f1']);
 
-        // ─── COURSES ────────────────────────────────────────────
-        $course1 = Course::create([
-            'id' => $this->cuid(),
-            'title' => 'Full-Stack Web Development Bootcamp',
-            'slug' => 'full-stack-web-development-bootcamp',
-            'description' => 'Master modern web development from HTML/CSS to React, Node.js, and databases. Build real-world projects and launch your career.',
-            'price' => 299.99,
-            'level' => 'BEGINNER',
-            'published' => true,
-            'featured' => true,
-            'trainer_id' => $trainer1->id,
-            'category_id' => $catDev->id,
-        ]);
-
-        $course2 = Course::create([
-            'id' => $this->cuid(),
-            'title' => 'Digital Marketing Mastery',
-            'slug' => 'digital-marketing-mastery',
-            'description' => 'Learn SEO, social media marketing, paid advertising, and content strategy to grow any business online.',
-            'price' => 199.99,
-            'level' => 'INTERMEDIATE',
-            'published' => true,
-            'featured' => true,
-            'trainer_id' => $trainer2->id,
-            'category_id' => $catMkt->id,
-        ]);
-
-        $course3 = Course::create([
-            'id' => $this->cuid(),
-            'title' => 'AI-Powered Business Automation',
-            'slug' => 'ai-powered-business-automation',
-            'description' => 'Harness the power of AI tools to automate workflows, analyze data, and make smarter business decisions.',
-            'price' => 0,
-            'level' => 'ADVANCED',
-            'published' => true,
-            'featured' => false,
-            'trainer_id' => $trainer1->id,
-            'category_id' => $catAI->id,
-        ]);
-
-        $course4 = Course::create([
-            'id' => $this->cuid(),
-            'title' => 'Startup Launch Blueprint',
-            'slug' => 'startup-launch-blueprint',
-            'description' => 'From idea validation to first revenue: a step-by-step guide to launching your startup in 90 days.',
-            'price' => 149.99,
-            'level' => 'BEGINNER',
-            'published' => true,
-            'featured' => false,
-            'trainer_id' => $trainer2->id,
-            'category_id' => $catBiz->id,
-        ]);
-
-        // ─── MODULES & LESSONS ──────────────────────────────────
-        $courses = [$course1, $course2, $course3, $course4];
-        $moduleNames = [
-            ['Getting Started', 'Core Fundamentals', 'Hands-On Projects', 'Final Assessment'],
-            ['Marketing Foundations', 'SEO Deep Dive', 'Social Media Strategy', 'Paid Ads Mastery'],
-            ['AI Landscape Overview', 'Prompt Engineering', 'Workflow Automation', 'Building AI Agents'],
-            ['Idea Validation', 'Business Model Canvas', 'MVP Development', 'Go-To-Market Strategy'],
+        // ─── NEW COURSES DATA ──────────────────────────────────
+        $coursesData = [
+            [
+                'title' => 'The Modern Business Blueprint: From Local Shop to Digital Empire',
+                'slug' => 'modern-business-blueprint',
+                'description' => 'Transform a messy, manual business into a structured, automated, and scalable digital empire. Designed for product-based business owners and entrepreneurs.',
+                'cat' => $catBiz,
+                'featured' => true,
+                'modules' => [
+                    [
+                        'title' => 'Module 1: Brand Architecture',
+                        'description' => 'Focuses on creating the "soul" of the business by defining Mission, Vision, Values, and identifying ICP and UVP.',
+                        'lessons' => ['Defining Mission, Vision, and Values', 'Identifying Your Ideal Customer Persona (ICP)', 'Crafting a Unique Value Proposition (UVP)']
+                    ],
+                    [
+                        'title' => 'Module 2: Digital Foundation',
+                        'description' => 'Covers setting up a central digital hub, including website development and social media assets.',
+                        'lessons' => ['E-commerce Platform Selection (Shopify vs WooCommerce)', 'Social Media Asset Optimization', 'Payment & Logistics Integration']
+                    ],
+                    [
+                        'title' => 'Module 3: Intelligent Operations',
+                        'description' => 'Teaches students how to move away from manual work using POS and inventory management software.',
+                        'lessons' => ['POS and Inventory Management Systems', 'Automating Order Workflows', 'Real-time Financial Tracking']
+                    ],
+                    [
+                        'title' => 'Module 4: Digital Tracking Arsenal',
+                        'description' => 'Instruction on setting up Meta Pixel, Google Analytics 4 (GA4), and Microsoft Clarity.',
+                        'lessons' => ['Setting up Meta Pixel & Conversions API', 'Google Analytics 4 (GA4) Implementation', 'Analyzing User Behavior with Microsoft Clarity']
+                    ],
+                    [
+                        'title' => 'Module 5: Digital Marketing Engine',
+                        'description' => 'A masterclass on Meta and Google Ads, focusing on campaign objectives and retargeting.',
+                        'lessons' => ['Meta Ads Strategy & Retargeting', 'Google Search & Shopping Ads', 'SEO Fundamentals for E-commerce']
+                    ],
+                    [
+                        'title' => 'Module 6: Sales and Customer Relationship Strategy',
+                        'description' => 'Focuses on Sales Funnels, CRM, and loyalty programs to maximize Customer Lifetime Value (CLV).',
+                        'lessons' => ['Designing High-Conversion Sales Funnels', 'CRM Implementation & Management', 'Building Loyalty Programs for CLV']
+                    ],
+                ]
+            ],
+            [
+                'title' => 'Smart Business Automation & Digital Tools Training',
+                'slug' => 'smart-business-automation',
+                'description' => 'Master the art of automating repetitive tasks and leveraging cutting-edge digital tools to skyrocket your operational efficiency.',
+                'cat' => $catAuto,
+                'featured' => false,
+                'modules' => [
+                    [
+                        'title' => 'Module 1: The Automation Mindset',
+                        'description' => 'Transitioning from manual hustle to high-performance automated systems.',
+                        'lessons' => ['Identifying Bottlenecks', 'Logic Gate Fundamentals', 'Designing Your First Workflow']
+                    ],
+                    [
+                        'title' => 'Module 2: Command Center Integration',
+                        'description' => 'Setting up Notion, Slack, and ClickUp as your business operating system.',
+                        'lessons' => ['Project Management Setup', 'Team Communication Architecture', 'Centralized Documentation']
+                    ],
+                    [
+                        'title' => 'Module 3: Trigger & Action Symphony',
+                        'description' => 'Orchestrating complex automations using Zapier, Make, and native platform integrations.',
+                        'lessons' => ['Multichannel Lead Syncing', 'Automated Customer Notifications', 'Data Migration Pipelines']
+                    ],
+                    [
+                        'title' => 'Module 4: Intelligence & Scaling',
+                        'description' => 'Using AI and advanced analytics to monitor and optimize your automated flows.',
+                        'lessons' => ['Automated KPI Reporting', 'Error Handling in Automations', 'Scaling Your Digital Infrastructure']
+                    ],
+                ]
+            ],
+            [
+                'title' => 'Software Training Program',
+                'slug' => 'software-training-program',
+                'description' => 'An intensive guide on using specialized software and platforms to operate, manage, and scale a modern business enterprise.',
+                'cat' => $catAuto,
+                'featured' => false,
+                'modules' => [
+                    [
+                        'title' => 'Module 1: Essential Business OS',
+                        'description' => 'Core navigation and configuration of top-tier business management platforms.',
+                        'lessons' => ['ERPs vs Specialty Software', 'Initial Setup & Licensing', 'User Permission Hierarchies']
+                    ],
+                    [
+                        'title' => 'Module 2: The SaaS Stack Ecosystem',
+                        'description' => 'Mastering the integration of accounting, CRM, and marketing softwares.',
+                        'lessons' => ['Accounting Software (Xero/QuickBooks)', 'CRM Platform Mastery (HubSpot)', 'Marketing Hub Configuration']
+                    ],
+                    [
+                        'title' => 'Module 3: Digital Asset Mastery',
+                        'description' => 'Secure management of cloud infrastructures and collaborative work environments.',
+                        'lessons' => ['Cloud Workspace Optimization', 'Collaborative Editing Workflows', 'Security & Access Protocols']
+                    ],
+                    [
+                        'title' => 'Module 4: Enterprise Troubleshooting',
+                        'description' => 'How to monitor, maintain, and fix software conflicts in a modern digital office.',
+                        'lessons' => ['Software Health Monitoring', 'Handling API Disconnections', 'Platform Performance Optimization']
+                    ],
+                ]
+            ]
         ];
 
-        foreach ($courses as $ci => $course) {
-            foreach ($moduleNames[$ci] as $mi => $moduleName) {
+        foreach ($coursesData as $cData) {
+            $course = Course::create([
+                'id' => $this->cuid(),
+                'title' => $cData['title'],
+                'slug' => $cData['slug'],
+                'description' => $cData['description'],
+                'price' => 0,
+                'level' => 'BEGINNER',
+                'published' => true,
+                'featured' => $cData['featured'],
+                'trainer_id' => $trainer->id,
+                'category_id' => $cData['cat']->id,
+            ]);
+
+            foreach ($cData['modules'] as $index => $data) {
                 $module = Module::create([
                     'id' => $this->cuid(),
-                    'title' => $moduleName,
-                    'description' => "Module " . ($mi + 1) . " of {$course->title}",
-                    'order' => $mi + 1,
-                    'type' => $mi === 0 ? 'ORIENTATION' : ($mi === 3 ? 'EVALUATION' : 'CORE'),
+                    'title' => $data['title'],
+                    'description' => $data['description'],
+                    'order' => $index + 1,
+                    'type' => 'CORE',
                     'course_id' => $course->id,
                 ]);
 
-                // Create 3 lessons per module
-                for ($li = 1; $li <= 3; $li++) {
+                foreach ($data['lessons'] as $lIndex => $lessonTitle) {
                     Lesson::create([
                         'id' => $this->cuid(),
-                        'title' => "{$moduleName} — Part {$li}",
-                        'content' => "<h2>{$moduleName} — Part {$li}</h2><p>This lesson covers the key concepts of {$moduleName}. Follow along with the examples and complete the exercises at the end.</p><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>",
-                        'duration' => rand(10, 45),
-                        'order' => $li,
+                        'title' => $lessonTitle,
+                        'content' => "<h3>{$lessonTitle}</h3><p>Detailed instruction on {$lessonTitle} as part of the {$data['title']}. Mastery of this topic is essential for building your modern business architecture.</p>",
+                        'duration' => rand(15, 60),
+                        'order' => $lIndex + 1,
                         'module_id' => $module->id,
                     ]);
                 }
             }
         }
 
-        // ─── ENROLLMENTS ────────────────────────────────────────
-        Enrollment::create([
-            'id' => $this->cuid(),
-            'user_id' => $student1->id,
-            'course_id' => $course1->id,
-            'status' => 'ACTIVE',
-            'progress' => 45.0,
-        ]);
-
-        Enrollment::create([
-            'id' => $this->cuid(),
-            'user_id' => $student1->id,
-            'course_id' => $course3->id,
-            'status' => 'ACTIVE',
-            'progress' => 10.0,
-        ]);
-
-        Enrollment::create([
-            'id' => $this->cuid(),
-            'user_id' => $student2->id,
-            'course_id' => $course2->id,
-            'status' => 'COMPLETED',
-            'progress' => 100.0,
-        ]);
-
-        Enrollment::create([
-            'id' => $this->cuid(),
-            'user_id' => $student2->id,
-            'course_id' => $course4->id,
-            'status' => 'ACTIVE',
-            'progress' => 72.5,
-        ]);
-
-        $this->command->info('✅ Seeded: 6 users, 4 categories, 4 courses, 16 modules, 48 lessons, 4 enrollments');
+        $this->command->info('✅ Successfully replaced all courses with the new curriculum.');
     }
 }

@@ -1,4 +1,4 @@
-import { Rocket, Target, Shield, Zap, Award, Globe, Heart, ArrowRight } from "lucide-react";
+import { Rocket, Target, Shield, Zap, Globe, Heart, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const values = [
@@ -10,7 +10,7 @@ const values = [
 
 export default function AboutUsPage() {
   return (
-    <div className="min-h-screen bg-[var(--bg-primary)] pb-24 overflow-hidden">
+    <div className="min-h-[100dvh] w-full max-w-[100vw] overflow-x-hidden bg-[var(--bg-primary)] pb-24 overflow-hidden">
       {/* Background Decorative elements */}
       <div className="mesh-bg opacity-30 pointer-events-none absolute inset-0" />
       <div className="absolute top-[20%] left-[-10%] w-[600px] h-[600px] bg-[var(--brand-500)]/5 rounded-full blur-[120px] animate-float-slow" />

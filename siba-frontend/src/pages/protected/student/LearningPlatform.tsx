@@ -33,8 +33,8 @@ export default function LearningPlatform() {
     }
   });
 
-  if (isLoading) return <div className="min-h-screen flex items-center justify-center bg-[var(--bg-primary)] text-[var(--text-primary)]">Loading learning path...</div>;
-  if (!data?.course) return <div className="min-h-screen flex items-center justify-center">Error loading course</div>;
+  if (isLoading) return <div className="min-h-[100dvh] w-full max-w-[100vw] overflow-x-hidden flex items-center justify-center bg-[var(--bg-primary)] text-[var(--text-primary)]">Loading learning path...</div>;
+  if (!data?.course) return <div className="min-h-[100dvh] w-full max-w-[100vw] overflow-x-hidden flex items-center justify-center">Error loading course</div>;
 
   const { course, progress } = data;
   
@@ -60,7 +60,7 @@ export default function LearningPlatform() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[var(--bg-primary)]">
+    <div className="min-h-[100dvh] w-full max-w-[100vw] overflow-x-hidden flex flex-col bg-[var(--bg-primary)]">
       {/* Header */}
       <header className="h-14 sm:h-16 border-b border-[var(--border-secondary)] bg-[var(--bg-secondary)] flex items-center px-2 sm:px-4 shrink-0 relative z-50">
         <button 

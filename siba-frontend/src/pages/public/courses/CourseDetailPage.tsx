@@ -52,11 +52,11 @@ export default function CourseDetailPage() {
     enrollMutation.mutate(course.id);
   };
 
-  if (isLoading) return <div className="min-h-screen flex items-center justify-center">Loading course...</div>;
-  if (error || !course) return <div className="min-h-screen flex items-center justify-center">Course not found.</div>;
+  if (isLoading) return <div className="min-h-[100dvh] w-full max-w-[100vw] overflow-x-hidden flex items-center justify-center">Loading course...</div>;
+  if (error || !course) return <div className="min-h-[100dvh] w-full max-w-[100vw] overflow-x-hidden flex items-center justify-center">Course not found.</div>;
 
   return (
-    <div className="min-h-screen bg-[var(--bg-primary)]">
+    <div className="min-h-[100dvh] w-full max-w-[100vw] overflow-x-hidden bg-[var(--bg-primary)]">
       <div className="mesh-bg" />
 
       {/* Hero Section */}

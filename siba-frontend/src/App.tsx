@@ -95,9 +95,9 @@ export default function App() {
 // Unified Layout for all Public Pages
 function PublicLayoutShell() {
   return (
-    <div className="min-h-screen bg-[var(--bg-primary)] flex flex-col">
+    <div className="min-h-[100dvh] bg-[var(--bg-primary)] flex flex-col w-full max-w-[100vw] overflow-x-hidden relative">
       <PublicNavbar />
-      <main className="flex-1">
+      <main className="flex-1 w-full max-w-[100vw] overflow-x-hidden flex flex-col">
         <Outlet />
       </main>
       <PublicFooter />

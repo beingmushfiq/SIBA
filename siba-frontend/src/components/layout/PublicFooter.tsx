@@ -118,7 +118,7 @@ export function PublicFooter() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="pt-6 sm:pt-10 border-t border-[var(--border-secondary)] flex flex-col md:flex-row items-center justify-between gap-4 sm:gap-8">
+        <div className="pt-6 sm:pt-10 border-t border-[var(--border-secondary)] flex flex-col md:flex-row items-center justify-between gap-4 sm:gap-8 pb-24 md:pb-0">
           <p className="text-[9px] font-black text-[var(--text-muted)] uppercase tracking-[0.3em] sm:tracking-[0.4em] text-center md:text-left">
             © {currentYear} SIBA. Sherazi IT. All Rights Reserved.
           </p>

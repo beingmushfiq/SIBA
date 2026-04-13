@@ -34,7 +34,7 @@ const testimonials = [
 
 export default function LearnersPage() {
   return (
-    <div className="min-h-screen bg-[var(--bg-primary)] pb-32 overflow-hidden">
+    <div className="min-h-[100dvh] w-full max-w-[100vw] overflow-x-hidden bg-[var(--bg-primary)] pb-32 overflow-hidden">
        {/* Background Decorative elements */}
       <div className="mesh-bg opacity-30 pointer-events-none absolute inset-0" />
       <div className="absolute top-[10%] right-[-10%] w-[600px] h-[600px] bg-[var(--brand-500)]/5 rounded-full blur-[120px] animate-float-slow" />

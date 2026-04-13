@@ -104,7 +104,7 @@ export default function HomePage() {
   const featuredCourses = catalogData?.courses?.slice(0, 3) || [];
 
   return (
-    <div className="min-h-screen bg-[var(--bg-primary)] selection:bg-[var(--brand-500)] selection:text-white">
+    <div className="min-h-[100dvh] w-full max-w-[100vw] overflow-x-hidden bg-[var(--bg-primary)] selection:bg-[var(--brand-500)] selection:text-white">
       {/* ─── HERO SECTION ───────────────────────────────────── */}
       <section className="relative min-h-[70vh] md:min-h-[85vh] pt-16 sm:pt-20 lg:pt-24 pb-8 sm:pb-12 flex flex-col items-center justify-center overflow-hidden">
         <div className="hero-spotlight" />
@@ -122,7 +122,7 @@ export default function HomePage() {
               <div className="h-1.5 w-16 bg-gradient-to-r from-[var(--brand-500)] to-transparent rounded-full" />
             </div>
 
-             <h1 className="text-fluid-hero font-black tracking-tighter mb-4 sm:mb-6 lg:mb-8">
+             <h1 className="text-fluid-hero font-black tracking-tighter mb-2 sm:mb-4 lg:mb-6">
               <span className="text-[var(--text-primary)]">Sherazi IT</span><br />
               <span className="gradient-text">Business Academy.</span>
             </h1>
@@ -317,7 +317,7 @@ export default function HomePage() {
           </div>
 
            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 md:gap-10">
-            {featuredCourses.length > 0 ? featuredCourses.map((course: { id: string; category?: { name: string } }) => (
+            {featuredCourses.length > 0 ? featuredCourses.map((course: any) => (
               <div key={course.id} className="glass-card flex flex-col group soft-lift overflow-hidden">
                 <div className="aspect-[16/10] relative overflow-hidden bg-[var(--bg-tertiary)]">
                   <div className="absolute inset-0 bg-gradient-to-br from-[var(--brand-900)] to-black opacity-30 group-hover:opacity-10 transition-opacity duration-700" />
@@ -340,14 +340,14 @@ export default function HomePage() {
                         <Users className="w-5 h-5 text-[var(--brand-400)]" />
                       </div>
                       <div>
-                        <p className="text-[var(--text-muted)] uppercase tracking-tighter text-[7px] font-black">Trainer</p>
+                        <p className="text-[var(--text-muted)] uppercase tracking-tighter text-[7px] font-black">Industry Experts</p>
                         <p className="text-[11px] font-black text-[var(--text-primary)] truncate max-w-[100px]">{course.trainer?.name}</p>
                       </div>
                     </div>
                     <div className="text-right">
                       <p className="text-[var(--text-muted)] uppercase tracking-tighter text-[7px] font-black">Investment</p>
                       <p className="text-xl font-black text-[var(--text-primary)] tracking-tight">
-                        {course.price > 0 ? formatCurrency(course.price) : "Scholarship"}
+                        {course.price > 0 ? formatCurrency(course.price) : "Free"}
                       </p>
                     </div>
                   </div>

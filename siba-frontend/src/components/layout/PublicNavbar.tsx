@@ -49,14 +49,17 @@ export function PublicNavbar() {
         role="navigation"
         aria-label="Main navigation"
         className={cn(
-          "fixed transition-all duration-500 z-[100]",
-          "bottom-3 sm:bottom-6 top-auto inset-x-2 sm:inset-x-4 md:inset-x-8 md:top-6 md:bottom-auto lg:inset-x-12",
+          "fixed font-sans transition-all duration-500 z-[9999] pointer-events-auto",
+          "bottom-4 inset-x-0 mx-auto w-[calc(100%-1rem)] max-w-[400px]",
+          "sm:bottom-6 sm:w-[calc(100%-2rem)] sm:max-w-none",
+          "md:inset-x-8 md:mx-0 md:w-auto md:top-6 md:bottom-auto",
+          "lg:inset-x-12",
           "h-16 flex items-center px-2 sm:px-4 md:px-6 lg:px-10 rounded-2xl sm:rounded-[1.5rem] glass shadow-2xl safe-bottom",
           scrolled ? "md:top-4 md:inset-x-6 lg:inset-x-24 border-[var(--brand-500)]/20" : "border-white/10"
         )}
       >
         {/* Mobile: xs — show priority 4 items + menu */}
-        <div className="flex sm:hidden items-center justify-between w-full">
+        <div className="flex sm:hidden items-center justify-between w-full h-full">
           {mobileNavItems.map((item) => {
             const isActive = location.pathname === item.href;
             return (

@@ -31,7 +31,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[var(--bg-primary)] flex items-center justify-center p-6 transition-colors duration-[var(--duration-normal)] relative overflow-hidden">
+    <div className="min-h-[100dvh] w-full max-w-[100vw] overflow-x-hidden bg-[var(--bg-primary)] flex items-center justify-center p-6 transition-colors duration-[var(--duration-normal)] relative overflow-hidden">
        {/* Background Elements */}
        <div className="mesh-bg opacity-40 pointer-events-none absolute inset-0" />
        <div className="absolute top-[20%] left-[-10%] w-[500px] h-[500px] bg-[var(--brand-500)]/5 rounded-full blur-[120px] animate-float-slow" />

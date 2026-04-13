@@ -63,7 +63,7 @@ export default function CertificateVerificationPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[var(--bg-primary)] pb-24 overflow-hidden">
+    <div className="min-h-[100dvh] w-full max-w-[100vw] overflow-x-hidden bg-[var(--bg-primary)] pb-24 overflow-hidden">
       {/* Background Decorative elements */}
       <div className="mesh-bg opacity-30 pointer-events-none absolute inset-0" />
       <div className="absolute top-[10%] right-[-10%] w-[600px] h-[600px] bg-[var(--brand-500)]/5 rounded-full blur-[120px] animate-float-slow" />
@@ -128,8 +128,8 @@ export default function CertificateVerificationPage() {
                                <CheckCircle2 className="w-3.5 h-3.5" />
                                Verified Credential
                             </div>
-                            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-[var(--text-primary)] tracking-tight">{result.user?.name}</h2>
-                            <p className="text-xl font-medium text-[var(--text-secondary)] opacity-80">{result.course?.title}</p>
+                            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-[var(--text-primary)] tracking-tight">{result?.user?.name}</h2>
+                            <p className="text-xl font-medium text-[var(--text-secondary)] opacity-80">{result?.course?.title}</p>
                          </div>
                          <Button className="h-14 px-8 rounded-xl font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-xl shadow-emerald-500/10 active:scale-95 transition-all">
                             <Download className="w-4 h-4 mr-2" /> Download JSON / PDF
@@ -143,7 +143,7 @@ export default function CertificateVerificationPage() {
                             </div>
                             <div>
                                <div className="text-[10px] uppercase font-black text-[var(--text-muted)] tracking-widest mb-1">Authenticated On</div>
-                               <div className="font-bold text-lg">{new Date(result.issue_date).toLocaleDateString(undefined, { dateStyle: 'long' })}</div>
+                               <div className="font-bold text-lg">{new Date(result?.issue_date || "").toLocaleDateString(undefined, { dateStyle: 'long' })}</div>
                             </div>
                          </div>
                          <div className="flex items-center gap-5">
@@ -152,7 +152,7 @@ export default function CertificateVerificationPage() {
                             </div>
                             <div>
                                <div className="text-[10px] uppercase font-black text-[var(--text-muted)] tracking-widest mb-1">Serial Authority</div>
-                               <div className="font-bold text-lg font-mono tracking-tight">{result.certificate_no}</div>
+                               <div className="font-bold text-lg font-mono tracking-tight">{result?.certificate_no}</div>
                             </div>
                          </div>
                       </div>
@@ -172,7 +172,7 @@ export default function CertificateVerificationPage() {
                    {result && (
                       <div className="pt-8 border-t border-[var(--border-secondary)]">
                          <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--text-muted)] mb-2">Original Subject</p>
-                         <p className="font-bold text-[var(--text-primary)] text-lg">{result.user?.name}</p>
+                         <p className="font-bold text-[var(--text-primary)] text-lg">{result?.user?.name}</p>
                       </div>
                    )}
                 </div>
