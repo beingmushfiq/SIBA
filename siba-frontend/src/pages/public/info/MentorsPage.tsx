@@ -1,4 +1,4 @@
-import { MessageCircle, Star, Sparkles } from "lucide-react";
+import { MessageCircle, Sparkles } from "lucide-react";
 
 const mentors = [
   {
@@ -7,7 +7,6 @@ const mentors = [
     image: "/images/mentors/nobin.jpg", // Anonymous mask style
     expertise: ["Brand Strategy Architect", "Business Architect", "Performance Marketing & Growth Lead"],
     bio: "The mastermind behind brand soul and rapid growth trajectory. Nobin architectures brand identity and rapid growth trajectories with surgical precision.",
-    stats: { students: "1.2K", rating: "5.0", experience: "8Y" },
     links: { whatsapp: "8801846044470" }
   },
   {
@@ -16,7 +15,6 @@ const mentors = [
     image: "/images/mentors/shahanewas.jpg",
     expertise: ["Digital Infrastructure Specialist", "Software and Technical Architect", "Automation Design"],
     bio: "Architecting the invisible systems that power modern enterprise. Shahanewas builds high-performance digital foundations and seamless automated workflows.",
-    stats: { students: "900", rating: "4.9", experience: "7Y" },
     links: { whatsapp: "8801770921384" }
   },
   {
@@ -25,7 +23,6 @@ const mentors = [
     image: "/images/mentors/rasel.jpg",
     expertise: ["Economics Specialist", "Financial Realist", "Data Analytics & Tracking Scientist"],
     bio: "Transforming raw numbers into strategic power. Rasel specializes in financial realism and surgical data precision for sustainable scaling.",
-    stats: { students: "1.5K", rating: "5.0", experience: "10Y" },
     links: { whatsapp: "8801841011224" }
   },
   {
@@ -34,7 +31,6 @@ const mentors = [
     image: "/images/mentors/rumel.jpg",
     expertise: ["Business Development", "Business Analysis", "Sales & Retention Strategist"],
     bio: "Driving sustainable revenue through deep analysis and elite retention frameworks. Rumel builds sustainable revenue engines by capturing and keeping growth.",
-    stats: { students: "1.1K", rating: "4.8", experience: "6Y" },
     links: { whatsapp: "8801955240211" }
   },
   {
@@ -43,7 +39,6 @@ const mentors = [
     image: "/images/mentors/tamim.jpg",
     expertise: ["Operations & Automation Expert", "Technical Demonstrator", "Feedback Specialist"],
     bio: "Bridging technical complexity with operational clarity. Faiaz specializes in real-world demonstrations and feedback loops.",
-    stats: { students: "850", rating: "4.9", experience: "5Y" },
     links: { whatsapp: "8801952387346" }
   },
   {
@@ -52,7 +47,6 @@ const mentors = [
     image: "/images/mentors/mushfiq.jpg",
     expertise: ["Operations & Automation Expert", "Context & Orientation Guide", "Case Study Analyst"],
     bio: "Navigating the complex landscape of business automation. Mushfiq specializes in situational orientation and deep_case study analysis.",
-    stats: { students: "2.1K", rating: "5.0", experience: "9Y" },
     links: { whatsapp: "8801929324580" }
   }
 ];
@@ -119,23 +113,7 @@ export default function MentorsPage() {
                     ))}
                     </div>
 
-                    <div className="grid grid-cols-3 gap-3 md:gap-6 py-6 md:py-8 border-y border-[var(--border-secondary)]">
-                    <div className="space-y-1">
-                        <div className="text-xl md:text-2xl font-black text-[var(--text-primary)] tracking-tighter">{mentor.stats.students}</div>
-                        <div className="text-[8px] md:text-[9px] uppercase font-black text-[var(--text-muted)] tracking-widest opacity-60">Operatives</div>
-                    </div>
-                    <div className="space-y-1">
-                        <div className="text-xl md:text-2xl font-black text-[var(--text-primary)] flex items-center gap-1.5 tracking-tighter">
-                            {mentor.stats.rating}
-                            <Star className="w-3.5 h-3.5 md:w-4 h-4 fill-[var(--brand-500)] text-[var(--brand-500)]" />
-                        </div>
-                        <div className="text-[8px] md:text-[9px] uppercase font-black text-[var(--text-muted)] tracking-widest opacity-60">Benchmark</div>
-                    </div>
-                    <div className="space-y-1">
-                        <div className="text-xl md:text-2xl font-black text-[var(--text-primary)] tracking-tighter">{mentor.stats.experience}</div>
-                        <div className="text-[8px] md:text-[9px] uppercase font-black text-[var(--text-muted)] tracking-widest opacity-60">Velocity</div>
-                    </div>
-                    </div>
+
 
                     <div className="pt-4 relative z-30">
                     <a 
