@@ -40,6 +40,11 @@
   --space-12: 2.5rem;   /* 40px */
   --space-16: 3.5rem;   /* 56px */
 
+  /* Responsive Section Spacing */
+  --space-section: clamp(2rem, 5vw, 5rem);
+  --space-section-lg: clamp(3rem, 8vw, 8rem);
+  --space-page-x: clamp(1rem, 4vw, 3rem);
+
   /* Timing & Easing */
   --ease-out-premium: cubic-bezier(0.23, 1, 0.32, 1);
   --ease-in-out-premium: cubic-bezier(0.77, 0, 0.175, 1);
@@ -184,6 +189,11 @@
   img {
     max-width: 100%;
     height: auto;
+  }
+
+  /* Responsive body font sizing */
+  html {
+    font-size: clamp(15px, 1vw + 0.5rem, 16px);
   }
 }
 
@@ -427,4 +437,69 @@
 
 .animate-marquee:hover {
   animation-play-state: paused;
+}
+
+/* ─── FLUID TYPOGRAPHY ──────────────────────────────────── */
+.text-fluid-hero {
+  font-size: clamp(2.25rem, 6vw + 0.5rem, 8rem);
+  line-height: 0.9;
+}
+.text-fluid-display {
+  font-size: clamp(2rem, 5vw + 0.25rem, 6rem);
+  line-height: 0.9;
+}
+.text-fluid-heading {
+  font-size: clamp(1.75rem, 3.5vw + 0.25rem, 4rem);
+  line-height: 1;
+}
+.text-fluid-subheading {
+  font-size: clamp(1.25rem, 2vw + 0.25rem, 2.5rem);
+  line-height: 1.2;
+}
+.text-fluid-body {
+  font-size: clamp(0.875rem, 1vw + 0.25rem, 1.125rem);
+  line-height: 1.6;
+}
+
+/* ─── TOUCH TARGET ──────────────────────────────────────── */
+.touch-target {
+  min-width: 44px;
+  min-height: 44px;
+}
+
+/* ─── RESPONSIVE GLASS CARD ─────────────────────────────── */
+@media (max-width: 480px) {
+  .glass-card {
+    border-radius: 1.25rem;
+  }
+  /* Reduce blur on mobile for GPU performance */
+  .glass {
+    backdrop-filter: blur(12px) saturate(150%);
+  }
+}
+
+/* ─── REDUCED MOTION ────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-in,
+  .animate-slide-in-left,
+  .animate-slide-in-right,
+  .animate-slide-in-up,
+  .animate-float-slow,
+  .animate-reveal,
+  .animate-marquee {
+    animation: none !important;
+  }
+  .soft-lift:hover {
+    transform: none;
+  }
+  * {
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ─── SAFE AREA FOR NOTCHED PHONES ──────────────────────── */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
 }

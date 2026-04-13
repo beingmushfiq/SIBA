@@ -53,12 +53,12 @@ export default function LearningProcessPage() {
       <div className="mesh-bg opacity-30 pointer-events-none absolute inset-0" />
       <div className="absolute top-[15%] left-[-5%] w-[500px] h-[500px] bg-[var(--brand-500)]/5 rounded-full blur-[120px] animate-float-slow" />
 
-      <main className="pt-24 lg:pt-32 px-6 max-w-7xl mx-auto relative z-10">
+      <main className="pt-16 sm:pt-20 lg:pt-32 px-4 sm:px-6 max-w-7xl mx-auto relative z-10">
         <header className="text-center mb-16 animate-reveal">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[var(--brand-500)]/[0.08] text-[var(--brand-500)] text-[10px] font-black uppercase tracking-[0.4em] border border-[var(--brand-500)]/20 mb-8">
             Transmission Protocol
           </div>
-          <h1 className="text-6xl md:text-9xl font-black mb-10 tracking-tighter leading-[0.85]">
+          <h1 className="text-fluid-hero font-black mb-6 sm:mb-8 md:mb-10 tracking-tighter leading-[0.85]">
             The <span className="gradient-text">Flow Engine.</span>
           </h1>
           <p className="text-[var(--text-secondary)] text-xl max-w-2xl mx-auto leading-relaxed opacity-70">
@@ -66,18 +66,18 @@ export default function LearningProcessPage() {
           </p>
         </header>
 
-        <div className="space-y-48">
+        <div className="space-y-16 sm:space-y-24 md:space-y-32 lg:space-y-48">
           {steps.map((step, index) => (
             <section 
               key={index}
-              className={`flex flex-col ${index % 2 === 0 ? 'lg:flex-row' : 'lg:flex-row-reverse'} items-center gap-24 group`}
+              className={`flex flex-col ${index % 2 === 0 ? 'lg:flex-row' : 'lg:flex-row-reverse'} items-center gap-8 sm:gap-12 md:gap-16 lg:gap-24 group`}
             >
-              <div className="flex-[1.2] w-full space-y-10 group-hover:translate-y-[-10px] transition-transform duration-[var(--duration-slow)]">
+              <div className="flex-[1.2] w-full space-y-6 sm:space-y-8 md:space-y-10 group-hover:translate-y-[-10px] transition-transform duration-[var(--duration-slow)]">
                 <div className={`w-20 h-20 rounded-[2rem] bg-gradient-to-br ${step.color} text-white shadow-2xl flex items-center justify-center p-5 transform group-hover:rotate-12 transition-transform duration-[var(--duration-slow)]`}>
                   <step.icon className="w-full h-full" />
                 </div>
                 <div className="space-y-6">
-                  <h2 className="text-4xl sm:text-6xl font-black text-[var(--text-primary)] tracking-tight leading-none">{step.title}</h2>
+                  <h2 className="text-fluid-subheading sm:text-fluid-heading font-black text-[var(--text-primary)] tracking-tight leading-none">{step.title}</h2>
                   <p className="text-[var(--text-secondary)] text-lg leading-relaxed max-w-xl opacity-75">
                     {step.description}
                   </p>
@@ -96,7 +96,7 @@ export default function LearningProcessPage() {
 
               <div className="flex-1 w-full relative">
                 <div className={`absolute inset-0 bg-gradient-to-br ${step.color} opacity-[0.03] blur-[100px] rounded-full`} />
-                <div className="relative aspect-video rounded-[3rem] bg-[var(--bg-secondary)] border border-[var(--border-primary)] shadow-2xl flex items-center justify-center overflow-hidden group/box">
+                <div className="relative aspect-video rounded-2xl sm:rounded-[3rem] bg-[var(--bg-secondary)] border border-[var(--border-primary)] shadow-2xl flex items-center justify-center overflow-hidden group/box">
                   <div className="absolute inset-0 mesh-bg opacity-10" />
                   <div className={`absolute inset-0 bg-gradient-to-br ${step.color} opacity-0 group-hover/box:opacity-10 transition-opacity duration-[var(--duration-slow)]`} />
                   <div className="text-[20rem] font-black text-white/[0.03] select-none tracking-tighter group-hover/box:scale-110 transition-transform duration-[var(--duration-slow)]">
@@ -109,24 +109,24 @@ export default function LearningProcessPage() {
           ))}
         </div>
         
-        <div className="mt-64 relative group">
-           <div className="absolute inset-0 bg-gradient-to-br from-[var(--brand-600)] to-[var(--brand-900)] rounded-[4rem] group-hover:scale-[1.02] transition-transform duration-[var(--duration-slow)] shadow-[0_48px_120px_-24px_rgba(99,102,241,0.5)]" />
+        <div className="mt-16 sm:mt-24 md:mt-40 lg:mt-64 relative group">
+           <div className="absolute inset-0 bg-gradient-to-br from-[var(--brand-600)] to-[var(--brand-900)] rounded-2xl sm:rounded-[3rem] md:rounded-[4rem] group-hover:scale-[1.02] transition-transform duration-[var(--duration-slow)] shadow-[0_48px_120px_-24px_rgba(99,102,241,0.5)]" />
            <div className="absolute inset-0 mesh-bg opacity-20 pointer-events-none" />
            
-           <div className="relative p-12 md:p-24 text-white text-center space-y-12">
+           <div className="relative p-6 sm:p-8 md:p-16 lg:p-24 text-white text-center space-y-12">
               <div className="space-y-4">
                 <h3 className="text-[10px] font-black uppercase tracking-[0.5em] opacity-60">Architect your future</h3>
-                <h4 className="text-4xl md:text-7xl font-black tracking-tighter leading-none">Ready to Initiate<br />the Engine?</h4>
+                <h4 className="text-fluid-heading font-black tracking-tighter leading-none">Ready to Initiate<br />the Engine?</h4>
               </div>
               <p className="text-white/70 text-lg max-w-xl mx-auto leading-relaxed font-medium">
                 Join our elite ecosystem and master the high-stakes world of autonomous business operations.
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
-                <Link to="/register" className="h-20 px-16 rounded-3xl bg-white text-[var(--brand-600)] text-[11px] font-black uppercase tracking-[0.3em] hover:scale-[1.05] active:scale-95 transition-all shadow-2xl flex items-center justify-center gap-3">
+                <Link to="/register" className="h-14 px-8 sm:h-16 sm:px-12 md:h-20 md:px-16 rounded-2xl sm:rounded-3xl bg-white text-[var(--brand-600)] text-[11px] font-black uppercase tracking-[0.3em] hover:scale-[1.05] active:scale-95 transition-all shadow-2xl flex items-center justify-center gap-3">
                     Start Process
                     <ArrowRight className="w-4 h-4" />
                 </Link>
-                <Link to="/courses" className="h-20 px-16 rounded-3xl bg-white/10 border border-white/20 text-white text-[11px] font-black uppercase tracking-[0.3em] hover:bg-white/20 transition-all flex items-center justify-center">
+                <Link to="/courses" className="h-14 px-8 sm:h-16 sm:px-12 md:h-20 md:px-16 rounded-2xl sm:rounded-3xl bg-white/10 border border-white/20 text-white text-[11px] font-black uppercase tracking-[0.3em] hover:bg-white/20 transition-all flex items-center justify-center">
                     Review Tracks
                 </Link>
               </div>

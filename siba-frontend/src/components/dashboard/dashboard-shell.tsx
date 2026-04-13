@@ -100,7 +100,7 @@ export default function DashboardShell({ children, user }: DashboardLayoutProps)
       <aside
         className={cn(
           "fixed lg:relative z-50 h-full flex flex-col border-r border-[var(--border-primary)] bg-[var(--bg-secondary)] transition-all duration-300",
-          collapsed ? "w-[var(--sidebar-collapsed)]" : "w-[var(--sidebar-width)]",
+          collapsed ? "w-[var(--sidebar-collapsed)]" : "w-64 lg:w-[var(--sidebar-width)]",
           mobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
         )}
       >
@@ -176,7 +176,7 @@ export default function DashboardShell({ children, user }: DashboardLayoutProps)
       {/* Main Content */}
       <div className="flex-1 flex flex-col min-w-0">
         {/* Header */}
-        <header className="relative z-40 h-16 flex items-center gap-4 px-6 border-b border-[var(--border-primary)] bg-[var(--bg-secondary)]/80 backdrop-blur-md">
+        <header className="relative z-40 h-14 sm:h-16 flex items-center gap-2 sm:gap-4 px-3 sm:px-6 border-b border-[var(--border-primary)] bg-[var(--bg-secondary)]/80 backdrop-blur-md">
           <button
             onClick={() => setMobileOpen(true)}
             className="lg:hidden text-[var(--text-muted)] hover:text-[var(--text-primary)]"
@@ -185,7 +185,7 @@ export default function DashboardShell({ children, user }: DashboardLayoutProps)
           </button>
 
           {/* Search */}
-          <div className="flex-1 max-w-md">
+          <div className="flex-1 max-w-md hidden sm:block">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-muted)]" />
               <input
@@ -211,7 +211,7 @@ export default function DashboardShell({ children, user }: DashboardLayoutProps)
               </button>
 
               {showNotifications && (
-                <div className="absolute right-0 mt-2 w-80 bg-[var(--bg-card)] border border-[var(--border-primary)] rounded-xl shadow-lg z-50 overflow-hidden animate-fade-in">
+                <div className="absolute right-0 sm:right-0 mt-2 w-[calc(100vw-2rem)] sm:w-80 bg-[var(--bg-card)] border border-[var(--border-primary)] rounded-xl shadow-lg z-50 overflow-hidden animate-fade-in left-auto -right-2 sm:left-auto">
                   <div className="p-4 border-b border-[var(--border-primary)] flex items-center justify-between bg-[var(--bg-secondary)]/50">
                     <h3 className="font-semibold text-[var(--text-primary)]">Notifications</h3>
                     <span className="text-xs text-[var(--brand-400)] cursor-pointer hover:underline">Mark all as read</span>
@@ -252,7 +252,7 @@ export default function DashboardShell({ children, user }: DashboardLayoutProps)
         </header>
 
         {/* Page content */}
-        <main className="flex-1 overflow-y-auto p-6">
+        <main className="flex-1 overflow-y-auto p-3 sm:p-4 md:p-6">
           {children}
         </main>
       </div>

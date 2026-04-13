@@ -40,7 +40,7 @@ export default function RegisterPage() {
        <div className="mesh-bg opacity-40 pointer-events-none absolute inset-0" />
        <div className="absolute top-[20%] right-[-10%] w-[500px] h-[500px] bg-[var(--brand-500)]/5 rounded-full blur-[120px] animate-float-slow" />
        
-       <div className="fixed top-8 right-8 z-[100] flex items-center gap-4">
+       <div className="fixed top-4 right-4 sm:top-6 sm:right-6 md:top-8 md:right-8 z-[100] flex items-center gap-4">
           <Link to="/" className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors flex items-center gap-2">
             <ChevronLeft className="w-3.5 h-3.5" />
             Back to Home
@@ -49,15 +49,15 @@ export default function RegisterPage() {
        </div>
 
        <div className="w-full max-w-[440px] relative z-20 animate-reveal">
-          <div className="mb-10 flex flex-col items-center text-center">
+          <div className="mb-6 sm:mb-8 md:mb-10 flex flex-col items-center text-center">
              <Link to="/" className="mb-8 hover:scale-105 transition-transform active:scale-95">
               <Logo className="scale-125" />
              </Link>
-             <h2 className="text-4xl font-black text-[var(--text-primary)] mb-3 tracking-tighter">Join Academy.</h2>
+             <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-[var(--text-primary)] mb-2 sm:mb-3 tracking-tighter">Join Academy.</h2>
              <p className="text-[var(--text-secondary)] text-[13px] font-medium max-w-[300px] leading-relaxed opacity-70">Start your journey today with the world&apos;s first Academy built to modernize business.</p>
           </div>
           
-          <div className="glass-card p-10 shadow-2xl border-white/5 relative overflow-hidden group">
+          <div className="glass-card p-6 sm:p-8 md:p-10 shadow-2xl border-white/5 relative overflow-hidden group">
              <div className="absolute inset-0 bg-gradient-to-b from-[var(--brand-500)]/[0.02] to-transparent pointer-events-none" />
              
              {error && (
@@ -134,7 +134,7 @@ export default function RegisterPage() {
                 </Button>
              </form>
 
-             <div className="mt-10 pt-8 border-t border-[var(--border-secondary)] text-center relative z-10">
+             <div className="mt-6 sm:mt-8 md:mt-10 pt-6 sm:pt-8 border-t border-[var(--border-secondary)] text-center relative z-10">
                 <p className="text-[11px] font-black uppercase tracking-widest text-[var(--text-muted)] mb-4">Already have an account?</p>
                 <Link to="/login" className="inline-flex items-center justify-center px-8 h-12 rounded-xl bg-[var(--bg-secondary)] border border-[var(--border-primary)] text-xs font-black uppercase tracking-widest text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] hover:border-[var(--brand-500)] transition-all active:scale-95">
                    Sign In Instead

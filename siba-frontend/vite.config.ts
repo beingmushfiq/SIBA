@@ -5,7 +5,7 @@ import path from 'path'
 import { VitePWA } from 'vite-plugin-pwa'
 
 // https://vite.dev/config/
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
   plugins: [
     tailwindcss(),
     react(),
@@ -57,6 +57,9 @@ export default defineConfig({
           }
         ]
       },
+      workbox: {
+        globPatterns: mode === 'production' ? ['**/*.{js,css,html,svg,png,ico}'] : []
+      },
       devOptions: {
         enabled: true,
         type: 'module'
@@ -68,4 +71,4 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
-})
+}))
