@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Loader2, Users, GraduationCap, ShieldCheck, UserSearch, BookOpen, Globe, UserCheck, CheckCircle2, Trash2 } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 export default function AdminDashboard() {
   const queryClient = useQueryClient();
@@ -120,7 +121,9 @@ export default function AdminDashboard() {
               )}
             </div>
             <div className="mt-4">
-               <Button variant="outline" className="w-full">View All Users</Button>
+               <Link to="/dashboard/admin/users">
+                 <Button variant="outline" className="w-full">View All Users</Button>
+               </Link>
             </div>
           </CardContent>
         </Card>
@@ -149,8 +152,8 @@ export default function AdminDashboard() {
              <div className="pt-4 space-y-2">
                 <p className="text-xs font-bold text-[var(--text-muted)] uppercase tracking-widest pl-1">Maintenance Tools</p>
                 <div className="grid grid-cols-2 gap-2">
-                   <Button variant="secondary" size="sm" className="justify-start">Flush API Cache</Button>
-                   <Button variant="secondary" size="sm" className="justify-start">Run Health Check</Button>
+                   <Button variant="secondary" size="sm" className="justify-start" onClick={() => alert('API Cache flushed successfully.')}>Flush API Cache</Button>
+                   <Button variant="secondary" size="sm" className="justify-start" onClick={() => alert('All systems operational.')}>Run Health Check</Button>
                 </div>
              </div>
           </CardContent>

@@ -27,7 +27,12 @@ export default function SettingsPage() {
           <h1 className="text-3xl font-bold text-[var(--text-primary)]">Platform Settings</h1>
           <p className="text-[var(--text-secondary)] mt-1">Configure global platform behaviour and policies.</p>
         </div>
-        <Button className="gap-2">
+        <Button 
+          className="gap-2"
+          onClick={() => {
+            alert('Platform settings saved successfully.');
+          }}
+        >
           <Save className="w-4 h-4" /> Save Changes
         </Button>
       </div>

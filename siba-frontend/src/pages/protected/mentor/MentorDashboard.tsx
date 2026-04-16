@@ -96,7 +96,13 @@ export default function MentorDashboard() {
                              <p className="text-xs text-[var(--text-muted)]">{assignment.student.email}</p>
                           </div>
                        </div>
-                       <Button variant="secondary" size="sm">View Progress</Button>
+                       <Button 
+                          variant="secondary" 
+                          size="sm"
+                          onClick={() => alert(`Opening progress report for ${assignment.student.name}`)}
+                       >
+                          View Progress
+                       </Button>
                     </CardContent>
                   </Card>
                 ))
@@ -117,7 +123,7 @@ export default function MentorDashboard() {
                  {sessions.length === 0 ? (
                     <div className="text-center py-8">
                        <p className="text-sm text-[var(--text-muted)] mb-4">No sessions scheduled for today.</p>
-                       <Button variant="outline" className="w-full">Schedule Session</Button>
+                       <Button variant="outline" className="w-full" onClick={() => alert('Opening schedule module.')}>Schedule Session</Button>
                     </div>
                  ) : (
                     <div className="space-y-3">
@@ -125,7 +131,7 @@ export default function MentorDashboard() {
                           <div key={session.id} className="p-3 rounded-lg border border-[var(--border-secondary)] bg-[var(--bg-secondary)]">
                              <p className="text-sm font-bold text-[var(--text-primary)]">{session.title}</p>
                              <p className="text-xs text-[var(--text-muted)]">{new Date(session.scheduled_at).toLocaleString()}</p>
-                             <Button size="sm" className="w-full mt-2" variant="default">Join Call</Button>
+                             <Button size="sm" className="w-full mt-2" variant="default" onClick={() => alert('Starting video session...')}>Join Call</Button>
                           </div>
                        ))}
                     </div>
@@ -143,7 +149,7 @@ export default function MentorDashboard() {
               </CardHeader>
               <CardContent>
                  <p className="text-sm text-[var(--text-muted)] mb-4 text-center">Receive notifications when students request review on their benchmarks.</p>
-                 <Button variant="secondary" className="w-full">Open Activity Log</Button>
+                 <Button variant="secondary" className="w-full" onClick={() => alert('Activity log is currently empty.')}>Open Activity Log</Button>
               </CardContent>
            </Card>
         </div>

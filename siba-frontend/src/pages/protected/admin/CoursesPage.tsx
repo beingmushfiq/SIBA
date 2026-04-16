@@ -53,7 +53,10 @@ export default function AdminCoursesPage() {
           <h1 className="text-3xl font-bold text-[var(--text-primary)]">Course Management</h1>
           <p className="text-[var(--text-secondary)] mt-1">Manage all courses across the platform.</p>
         </div>
-        <Button className="h-11 rounded-xl px-5 gap-2">
+        <Button 
+          className="h-11 rounded-xl px-5 gap-2"
+          onClick={() => alert("Navigate to Course Editor")}
+        >
           <Plus className="w-4 h-4" /> Create Course
         </Button>
       </div>

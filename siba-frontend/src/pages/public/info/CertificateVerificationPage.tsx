@@ -131,7 +131,10 @@ export default function CertificateVerificationPage() {
                             <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-[var(--text-primary)] tracking-tight">{result?.user?.name}</h2>
                             <p className="text-xl font-medium text-[var(--text-secondary)] opacity-80">{result?.course?.title}</p>
                          </div>
-                         <Button className="h-14 px-8 rounded-xl font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-xl shadow-emerald-500/10 active:scale-95 transition-all">
+                         <Button 
+                            className="h-14 px-8 rounded-xl font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-xl shadow-emerald-500/10 active:scale-95 transition-all"
+                            onClick={() => alert("Starting download for " + result?.certificate_no)}
+                         >
                             <Download className="w-4 h-4 mr-2" /> Download JSON / PDF
                          </Button>
                       </div>

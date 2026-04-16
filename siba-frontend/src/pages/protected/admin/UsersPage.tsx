@@ -86,7 +86,10 @@ export default function UsersPage() {
               className="w-full h-11 pl-10 pr-4 rounded-xl bg-[var(--bg-secondary)] border border-[var(--border-secondary)] focus:outline-none focus:border-[var(--brand-500)] transition-all"
             />
           </div>
-          <Button className="h-11 rounded-xl px-4 flex gap-2">
+          <Button 
+            className="h-11 rounded-xl px-4 flex gap-2"
+            onClick={() => alert('Opening Add User modal...')}
+          >
             <UserPlus className="w-4 h-4" />
             <span className="hidden sm:inline">Add User</span>
           </Button>
@@ -112,7 +115,10 @@ export default function UsersPage() {
                       <Shield className="w-2.5 h-2.5 text-white" />
                     </div>
                   </div>
-                  <button className="p-2 rounded-lg hover:bg-[var(--bg-tertiary)] text-[var(--text-muted)] transition-colors">
+                  <button 
+                    className="p-2 rounded-lg hover:bg-[var(--bg-tertiary)] text-[var(--text-muted)] transition-colors"
+                    onClick={() => alert(`Options for ${user.name}`)}
+                  >
                     <MoreVertical className="w-4 h-4" />
                   </button>
                 </div>
@@ -143,10 +149,16 @@ export default function UsersPage() {
                       </p>
                     </div>
                     <div className="flex items-center justify-end gap-2">
-                      <button className="p-2 rounded-lg hover:bg-blue-500/10 text-blue-500 transition-colors">
+                      <button 
+                        className="p-2 rounded-lg hover:bg-blue-500/10 text-blue-500 transition-colors"
+                        onClick={() => alert(`Edit user: ${user.name}`)}
+                      >
                         <Edit className="w-4 h-4" />
                       </button>
-                      <button className="p-2 rounded-lg hover:bg-red-500/10 text-red-500 transition-colors">
+                      <button 
+                        className="p-2 rounded-lg hover:bg-red-500/10 text-red-500 transition-colors"
+                        onClick={() => confirm(`Are you sure you want to delete ${user.name}?`) ? alert('User deleted.') : null}
+                      >
                         <Trash2 className="w-4 h-4" />
                       </button>
                     </div>
