@@ -2,7 +2,7 @@ import { Outlet } from 'react-router-dom';
 import { useAuthStore } from '@/store/useAuthStore';
 import DashboardShell from '@/components/dashboard/dashboard-shell';
 
-export default function StudentLayout() {
+export default function DashboardLayout() {
   const { user } = useAuthStore();
 
   if (!user) return null;

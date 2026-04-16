@@ -149,17 +149,110 @@ Auth: **Bearer Token (JWT)**
 
 # 📁 Project Structure
 ```text
-├── siba-api/               # Laravel Backend Engine
-│   ├── app/                # Models & Controllers
-│   ├── routes/             # API Endpoints
-│   └── database/           # Migrations & Seeders
-├── siba-frontend/          # React Single Page App
-│   ├── src/
-│   │   ├── components/     # UI System & Atomic Layouts
-│   │   ├── pages/          # View Layer (Public/Protected)
-│   │   └── lib/            # Utilities (Axios, PWA handlers)
-└── README.md
+Training Platform/
+├── README.md
+├── .gitignore
+│
+├── siba-api/                           # 🔧 Laravel API (Backend)
+│   ├── app/
+│   │   ├── Http/
+│   │   │   ├── Controllers/Api/        # 12 API controllers
+│   │   │   └── Middleware/
+│   │   │       └── CheckRole.php       # RBAC middleware
+│   │   ├── Models/                     # 21 Eloquent models
+│   │   └── Providers/
+│   ├── config/                         # App, auth, JWT config
+│   ├── database/
+│   │   ├── migrations/                 # Schema definitions
+│   │   └── seeders/                    # Demo data
+│   └── routes/
+│       ├── api.php                     # All API endpoints
+│       └── web.php                     # Health check
+│
+└── siba-frontend/                      # ⚛️ React SPA (Frontend)
+    ├── .env.example                    # Environment template
+    ├── public/                         # Static assets & PWA
+    │   └── images/mentors/             # Mentor photos
+    └── src/
+        ├── App.tsx                     # Router — all routes defined here
+        ├── main.tsx                    # Entry point
+        ├── index.css                   # Design tokens & global styles
+        │
+        ├── types/                      # Shared TypeScript interfaces
+        │   └── index.ts                # User, Course, Enrollment, etc.
+        │
+        ├── lib/                        # Utilities
+        │   ├── axios.ts                # API client (JWT interceptor)
+        │   └── utils.ts                # Helpers
+        │
+        ├── store/                      # Global state (Zustand)
+        │   └── useAuthStore.ts         # Auth state & token management
+        │
+        ├── constants/                  # Navigation configs
+        │   └── index.ts                # ADMIN_NAV, TRAINER_NAV, etc.
+        │
+        ├── layouts/                    # Route layout shells
+        │   ├── DashboardLayout.tsx     # Dashboard wrapper (all roles)
+        │   └── PublicLayout.tsx        # Public pages (navbar + footer)
+        │
+        ├── components/                 # Shared components
+        │   ├── auth/                   # ProtectedRoute
+        │   ├── dashboard/              # Dashboard shell, stat cards
+        │   ├── layout/                 # PublicNavbar, PublicFooter
+        │   └── ui/                     # Primitives (button, card, badge...)
+        │
+        └── pages/
+            ├── public/                 # No auth required
+            │   ├── HomePage.tsx
+            │   ├── auth/               # LoginPage, RegisterPage
+            │   ├── courses/            # CatalogPage, CourseDetailPage
+            │   └── info/               # Mentors, Learners, About, etc.
+            │
+            └── protected/              # Auth + role required
+                ├── admin/              # 🔴 Admin pages
+                │   ├── AdminDashboard.tsx
+                │   ├── UsersPage.tsx
+                │   ├── CoursesPage.tsx
+                │   ├── CertificateControl.tsx
+                │   ├── EnrollmentsPage.tsx
+                │   ├── RevenuePage.tsx
+                │   ├── AnalyticsPage.tsx
+                │   └── SettingsPage.tsx
+                │
+                ├── trainer/            # 🔵 Trainer pages
+                │   ├── TrainerDashboard.tsx
+                │   ├── CoursesPage.tsx
+                │   ├── CourseEditor.tsx
+                │   ├── StudentsPage.tsx
+                │   ├── SubmissionsPage.tsx
+                │   ├── SessionsPage.tsx
+                │   └── AnalyticsPage.tsx
+                │
+                ├── student/            # 🟢 Student pages
+                │   ├── StudentDashboard.tsx
+                │   ├── CoursesPage.tsx
+                │   ├── AssignmentsPage.tsx
+                │   ├── Certificates.tsx
+                │   ├── BusinessTracker.tsx
+                │   ├── ProgressPage.tsx
+                │   └── LearningPlatform.tsx
+                │
+                └── mentor/             # 🟣 Mentor pages
+                    ├── MentorDashboard.tsx
+                    ├── StudentsPage.tsx
+                    ├── SessionsPage.tsx
+                    └── FeedbackPage.tsx
 ```
+
+### 📌 Where to Add New Features
+| What | Where |
+|:---|:---|
+| New page for a role | `src/pages/protected/<role>/` → then add route in `App.tsx` |
+| Shared UI component | `src/components/ui/` |
+| API endpoint handler | `siba-api/app/Http/Controllers/Api/` → register in `routes/api.php` |
+| Shared TypeScript type | `src/types/index.ts` |
+| Global state | `src/store/` |
+| Navigation link | `src/constants/index.ts` (role-specific nav arrays) |
 
 ---
 
