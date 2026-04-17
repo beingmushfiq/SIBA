@@ -84,4 +84,51 @@ class AdminController extends Controller
         $user->delete();
         return response()->json(['success' => true]);
     }
+    /**
+     * Revenue dashboard data
+     */
+    public function revenue()
+    {
+        $totalRevenue = Enrollment::join('courses', 'enrollments.course_id', '=', 'courses.id')
+            ->sum('courses.price');
+            
+        $recentTransactions = Enrollment::with(['user', 'course'])
+            ->latest()
+            ->take(10)
+            ->get()
+            ->map(function($en) {
+                return [
+                    'id' => $en->id,
+                    'student' => $en->user->name ?? 'Unknown',
+                    'course' => $en->course->title ?? 'Deleted Course',
+                    'amount' => $en->course->price ?? 0,
+                    'date' => $en->created_at->format('Y-m-d'),
+                    'type' => 'enrollment'
+                ];
+            });
+
+        // Simple monthly trend (last 12 months)
+        $trend = [];
+        for ($i = 0; $i < 12; $i++) {
+            $month = now()->subMonths($i);
+            $revenue = Enrollment::join('courses', 'enrollments.course_id', '=', 'courses.id')
+                ->whereMonth('enrollments.created_at', $month->month)
+                ->whereYear('enrollments.created_at', $month->year)
+                ->sum('courses.price');
+                
+            $trend[] = [
+                'month' => $month->format('M'),
+                'revenue' => $revenue
+            ];
+        }
+
+        return response()->json([
+            'totalRevenue' => $totalRevenue,
+            'thisMonth' => $trend[0]['revenue'],
+            'transactionsCount' => Enrollment::count(),
+            'avgOrderValue' => Enrollment::count() > 0 ? $totalRevenue / Enrollment::count() : 0,
+            'transactions' => $recentTransactions,
+            'trend' => array_reverse($trend)
+        ]);
+    }
 }

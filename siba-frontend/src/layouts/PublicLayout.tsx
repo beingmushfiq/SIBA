@@ -6,7 +6,7 @@ export default function PublicLayout() {
   return (
     <div className="min-h-[100dvh] bg-[var(--bg-primary)] flex flex-col w-full max-w-[100vw] overflow-x-hidden relative">
       <PublicNavbar />
-      <main className="flex-1 w-full max-w-[100vw] overflow-x-hidden flex flex-col">
+      <main className="flex-1 w-full max-w-[100vw] overflow-x-hidden flex flex-col pb-24 md:pb-0">
         <Outlet />
       </main>
       <PublicFooter />

@@ -33,10 +33,8 @@ export function PublicFooter() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 md:gap-12 lg:gap-8 mb-12 md:mb-16 lg:mb-24">
           
           {/* Brand Column */}
-          <div className="lg:col-span-4 space-y-6 md:space-y-10">
-            <Link to="/" className="inline-block transition-transform transition-all active:scale-95 duration-[var(--duration-fast)]">
-              <Logo className="scale-110 sm:scale-125 origin-left" />
-            </Link>
+          <div className="lg:col-span-4 space-y-8 md:space-y-10">
+            <Logo size="lg" className="origin-left transition-all active:scale-95 duration-[var(--duration-fast)]" />
             <p className="text-[var(--text-secondary)] leading-[1.8] max-w-sm text-sm md:text-[15px] opacity-70">
               Bangladesh&apos;s first Non-profit Academy built to modernize professional systems through elite IT integration and scalable business architectures.
             </p>

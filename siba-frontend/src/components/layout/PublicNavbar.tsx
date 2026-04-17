@@ -118,9 +118,7 @@ export function PublicNavbar() {
         </div>
 
         {/* Desktop: xl+ */}
-        <Link to="/" className="hidden xl:flex items-center shrink-0 transition-transform active:scale-95">
-          <Logo className="sm:scale-110" />
-        </Link>
+        <Logo size="md" className="hidden xl:flex items-center shrink-0 transition-transform active:scale-95" />
 
         <div className="hidden xl:flex items-center gap-2 ml-8">
           {navItems.map((item) => {

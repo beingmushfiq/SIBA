@@ -1,57 +1,58 @@
-import { useEffect } from 'react';
+import { useEffect, lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { useAuthStore } from '@/store/useAuthStore';
+import { LoadingOverlay } from './components/layout/LoadingOverlay';
 
 // ─── Layouts ────────────────────────────────────────────────
-import PublicLayout from './layouts/PublicLayout';
-import DashboardLayout from './layouts/DashboardLayout';
+const PublicLayout = lazy(() => import('./layouts/PublicLayout'));
+const DashboardLayout = lazy(() => import('./layouts/DashboardLayout'));
 import { ProtectedRoute } from './components/auth/ProtectedRoute';
 
 // ─── Public Pages ───────────────────────────────────────────
-import HomePage from './pages/public/HomePage';
-import CatalogPage from './pages/public/courses/CatalogPage';
-import CourseDetailPage from './pages/public/courses/CourseDetailPage';
-import LoginPage from './pages/public/auth/LoginPage';
-import RegisterPage from './pages/public/auth/RegisterPage';
-import LearningProcessPage from './pages/public/info/LearningProcessPage';
-import MentorsPage from './pages/public/info/MentorsPage';
-import LearnersPage from './pages/public/info/LearnersPage';
-import CertificateVerificationPage from './pages/public/info/CertificateVerificationPage';
-import AboutUsPage from './pages/public/info/AboutUsPage';
+const HomePage = lazy(() => import('./pages/public/HomePage'));
+const CatalogPage = lazy(() => import('./pages/public/courses/CatalogPage'));
+const CourseDetailPage = lazy(() => import('./pages/public/courses/CourseDetailPage'));
+const LoginPage = lazy(() => import('./pages/public/auth/LoginPage'));
+const RegisterPage = lazy(() => import('./pages/public/auth/RegisterPage'));
+const LearningProcessPage = lazy(() => import('./pages/public/info/LearningProcessPage'));
+const MentorsPage = lazy(() => import('./pages/public/info/MentorsPage'));
+const LearnersPage = lazy(() => import('./pages/public/info/LearnersPage'));
+const CertificateVerificationPage = lazy(() => import('./pages/public/info/CertificateVerificationPage'));
+const AboutUsPage = lazy(() => import('./pages/public/info/AboutUsPage'));
 
 // ─── Student Pages ──────────────────────────────────────────
-import StudentDashboard from './pages/protected/student/StudentDashboard';
-import StudentCoursesPage from './pages/protected/student/CoursesPage';
-import AssignmentsPage from './pages/protected/student/AssignmentsPage';
-import StudentCertificates from './pages/protected/student/Certificates';
-import BusinessTracker from './pages/protected/student/BusinessTracker';
-import ProgressPage from './pages/protected/student/ProgressPage';
-import LearningPlatform from './pages/protected/student/LearningPlatform';
+const StudentDashboard = lazy(() => import('./pages/protected/student/StudentDashboard'));
+const StudentCoursesPage = lazy(() => import('./pages/protected/student/CoursesPage'));
+const AssignmentsPage = lazy(() => import('./pages/protected/student/AssignmentsPage'));
+const StudentCertificates = lazy(() => import('./pages/protected/student/Certificates'));
+const BusinessTracker = lazy(() => import('./pages/protected/student/BusinessTracker'));
+const ProgressPage = lazy(() => import('./pages/protected/student/ProgressPage'));
+const LearningPlatform = lazy(() => import('./pages/protected/student/LearningPlatform'));
 
 // ─── Trainer Pages ──────────────────────────────────────────
-import TrainerDashboard from './pages/protected/trainer/TrainerDashboard';
-import TrainerCoursesPage from './pages/protected/trainer/CoursesPage';
-import TrainerStudentsPage from './pages/protected/trainer/StudentsPage';
-import SubmissionsPage from './pages/protected/trainer/SubmissionsPage';
-import TrainerSessionsPage from './pages/protected/trainer/SessionsPage';
-import TrainerAnalyticsPage from './pages/protected/trainer/AnalyticsPage';
-import CourseEditor from './pages/protected/trainer/CourseEditor';
+const TrainerDashboard = lazy(() => import('./pages/protected/trainer/TrainerDashboard'));
+const TrainerCoursesPage = lazy(() => import('./pages/protected/trainer/CoursesPage'));
+const TrainerStudentsPage = lazy(() => import('./pages/protected/trainer/StudentsPage'));
+const SubmissionsPage = lazy(() => import('./pages/protected/trainer/SubmissionsPage'));
+const TrainerSessionsPage = lazy(() => import('./pages/protected/trainer/SessionsPage'));
+const TrainerAnalyticsPage = lazy(() => import('./pages/protected/trainer/AnalyticsPage'));
+const CourseEditor = lazy(() => import('./pages/protected/trainer/CourseEditor'));
 
 // ─── Admin Pages ────────────────────────────────────────────
-import AdminDashboard from './pages/protected/admin/AdminDashboard';
-import UsersPage from './pages/protected/admin/UsersPage';
-import AdminCoursesPage from './pages/protected/admin/CoursesPage';
-import CertificateControl from './pages/protected/admin/CertificateControl';
-import EnrollmentsPage from './pages/protected/admin/EnrollmentsPage';
-import RevenuePage from './pages/protected/admin/RevenuePage';
-import AdminAnalyticsPage from './pages/protected/admin/AnalyticsPage';
-import SettingsPage from './pages/protected/admin/SettingsPage';
+const AdminDashboard = lazy(() => import('./pages/protected/admin/AdminDashboard'));
+const UsersPage = lazy(() => import('./pages/protected/admin/UsersPage'));
+const AdminCoursesPage = lazy(() => import('./pages/protected/admin/CoursesPage'));
+const CertificateControl = lazy(() => import('./pages/protected/admin/CertificateControl'));
+const EnrollmentsPage = lazy(() => import('./pages/protected/admin/EnrollmentsPage'));
+const RevenuePage = lazy(() => import('./pages/protected/admin/RevenuePage'));
+const AdminAnalyticsPage = lazy(() => import('./pages/protected/admin/AnalyticsPage'));
+const SettingsPage = lazy(() => import('./pages/protected/admin/SettingsPage'));
 
 // ─── Mentor Pages ───────────────────────────────────────────
-import MentorDashboard from './pages/protected/mentor/MentorDashboard';
-import MentorStudentsPage from './pages/protected/mentor/StudentsPage';
-import MentorSessionsPage from './pages/protected/mentor/SessionsPage';
-import FeedbackPage from './pages/protected/mentor/FeedbackPage';
+const MentorDashboard = lazy(() => import('./pages/protected/mentor/MentorDashboard'));
+const MentorStudentsPage = lazy(() => import('./pages/protected/mentor/StudentsPage'));
+const MentorSessionsPage = lazy(() => import('./pages/protected/mentor/SessionsPage'));
+const FeedbackPage = lazy(() => import('./pages/protected/mentor/FeedbackPage'));
 
 export default function App() {
   const checkAuth = useAuthStore((state) => state.checkAuth);
@@ -62,7 +63,8 @@ export default function App() {
 
   return (
     <BrowserRouter>
-      <Routes>
+      <Suspense fallback={<LoadingOverlay />}>
+        <Routes>
         {/* ── Public Pages ─────────────────────────────────── */}
         <Route element={<PublicLayout />}>
           <Route path="/" element={<HomePage />} />
@@ -130,6 +132,7 @@ export default function App() {
           </Route>
         </Route>
       </Routes>
+      </Suspense>
     </BrowserRouter>
   );
 }

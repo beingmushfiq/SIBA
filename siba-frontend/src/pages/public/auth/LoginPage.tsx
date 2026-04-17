@@ -46,9 +46,7 @@ export default function LoginPage() {
 
        <div className="w-full max-w-[420px] relative z-20 animate-reveal">
           <div className="mb-6 sm:mb-8 md:mb-10 flex flex-col items-center text-center">
-             <Link to="/" className="mb-8 hover:scale-105 transition-transform active:scale-95">
-              <Logo className="scale-125" />
-             </Link>
+             <Logo className="mb-8 hover:scale-105 transition-transform active:scale-95 scale-125" />
              <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-[var(--text-primary)] mb-2 sm:mb-3 tracking-tighter">Welcome back.</h2>
              <p className="text-[var(--text-secondary)] text-[13px] font-medium max-w-[280px] leading-relaxed opacity-70">Enter your credentials to access your professional dashboard.</p>
           </div>

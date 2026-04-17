@@ -1,57 +1,25 @@
-import { MessageCircle, Sparkles } from "lucide-react";
-
-const mentors = [
-  {
-    name: "Nobin Bonik",
-    role: "Architectural Lead & Growth Strategist",
-    image: "/images/mentors/nobin.jpg", // Anonymous mask style
-    expertise: ["Brand Strategy Architect", "Business Architect", "Performance Marketing & Growth Lead"],
-    bio: "The mastermind behind brand soul and rapid growth trajectory. Nobin architectures brand identity and rapid growth trajectories with surgical precision.",
-    links: { whatsapp: "8801846044470" }
-  },
-  {
-    name: "Shahanewas Shawon",
-    role: "Chief Technical Architect",
-    image: "/images/mentors/shahanewas.jpg",
-    expertise: ["Digital Infrastructure Specialist", "Software and Technical Architect", "Automation Design"],
-    bio: "Architecting the invisible systems that power modern enterprise. Shahanewas builds high-performance digital foundations and seamless automated workflows.",
-    links: { whatsapp: "8801770921384" }
-  },
-  {
-    name: "Rasel Ahmed",
-    role: "Financial & Data Scientist",
-    image: "/images/mentors/rasel.jpg",
-    expertise: ["Economics Specialist", "Financial Realist", "Data Analytics & Tracking Scientist"],
-    bio: "Transforming raw numbers into strategic power. Rasel specializes in financial realism and surgical data precision for sustainable scaling.",
-    links: { whatsapp: "8801841011224" }
-  },
-  {
-    name: "Rumel Ahmmed",
-    role: "Business Dev & Retention Lead",
-    image: "/images/mentors/rumel.jpg",
-    expertise: ["Business Development", "Business Analysis", "Sales & Retention Strategist"],
-    bio: "Driving sustainable revenue through deep analysis and elite retention frameworks. Rumel builds sustainable revenue engines by capturing and keeping growth.",
-    links: { whatsapp: "8801955240211" }
-  },
-  {
-    name: "S.M. Faiaz Tamim",
-    role: "Operational Clarity Lead",
-    image: "/images/mentors/tamim.jpg",
-    expertise: ["Operations & Automation Expert", "Technical Demonstrator", "Feedback Specialist"],
-    bio: "Bridging technical complexity with operational clarity. Faiaz specializes in real-world demonstrations and feedback loops.",
-    links: { whatsapp: "8801952387346" }
-  },
-  {
-    name: "Mushfiqur Rahman",
-    role: "Orientation & Context Architect",
-    image: "/images/mentors/mushfiq.jpg",
-    expertise: ["Operations & Automation Expert", "Context & Orientation Guide", "Case Study Analyst"],
-    bio: "Navigating the complex landscape of business automation. Mushfiq specializes in situational orientation and deep_case study analysis.",
-    links: { whatsapp: "8801929324580" }
-  }
-];
+import { MessageCircle, Sparkles, Loader2 } from "lucide-react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 export default function MentorsPage() {
+  const [mentors, setMentors] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchMentors = async () => {
+      try {
+        const response = await axios.get("http://localhost:8000/api/mentors");
+        setMentors(response.data);
+      } catch (error) {
+        console.error("Failed to fetch mentors", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchMentors();
+  }, []);
+
   return (
     <div className="min-h-[100dvh] w-full max-w-[100vw] overflow-x-hidden bg-[var(--bg-primary)] pb-32 overflow-hidden">
       {/* Background Decorative elements */}
@@ -71,6 +39,12 @@ export default function MentorsPage() {
           </p>
         </header>
 
+        {loading ? (
+          <div className="flex flex-col items-center justify-center py-20 gap-4">
+            <Loader2 className="w-12 h-12 text-[var(--brand-500)] animate-spin" />
+            <p className="text-[var(--text-muted)] font-black uppercase tracking-widest text-[10px]">Assembling Architects...</p>
+          </div>
+        ) : (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
           {mentors.map((mentor, index) => (
             <div key={index} className="glass-card flex flex-col md:flex-row group hover:bg-[var(--bg-secondary)]/[0.6] transition-all duration-[var(--duration-normal)] overflow-hidden border-transparent hover:border-[var(--brand-500)]/20 shadow-none hover:shadow-2xl">
@@ -130,6 +104,12 @@ export default function MentorsPage() {
             </div>
           ))}
         </div>
+        )}
+        {!loading && mentors.length === 0 && (
+           <div className="flex flex-col items-center justify-center py-20">
+             <p className="text-[var(--text-muted)] font-black uppercase tracking-widest text-[10px]">No Architects found in the records.</p>
+           </div>
+        )}
       </main>
     </div>
   );

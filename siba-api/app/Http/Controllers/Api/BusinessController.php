@@ -41,7 +41,6 @@ class BusinessController extends Controller
         }
 
         $plan = BusinessPlan::create([
-            'id' => 'c' . Str::lower(Str::random(24)),
             'title' => $validated['title'],
             'description' => $validated['description'] ?? null,
             'stage' => 'IDEA',
@@ -70,7 +69,6 @@ class BusinessController extends Controller
             ->firstOrFail();
 
         $entry = BusinessEntry::create([
-            'id' => 'c' . Str::lower(Str::random(24)),
             'title' => $validated['title'],
             'notes' => $validated['notes'] ?? null,
             'revenue' => $validated['revenue'] ?? 0,

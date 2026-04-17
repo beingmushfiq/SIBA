@@ -12,6 +12,7 @@ Route::post('/login', [AuthController::class, 'login']);
 // Public catalog (no auth needed)
 Route::get('/courses', [CourseController::class, 'index']);
 Route::get('/courses/{slug}', [CourseController::class, 'show']);
+Route::get('/mentors', [\App\Http\Controllers\Api\MentorController::class, 'index']);
 Route::get('/certificate/verify/{certificate_no}', [\App\Http\Controllers\Api\CertificateController::class, 'verify']);
 
 // ─── AUTHENTICATED ROUTES ───────────────────────────────────────
@@ -50,6 +51,7 @@ Route::middleware('auth:api')->group(function () {
         Route::get('/users', [\App\Http\Controllers\Api\AdminController::class, 'users']);
         Route::patch('/users/{id}/role', [\App\Http\Controllers\Api\AdminController::class, 'updateRole']);
         Route::delete('/users/{id}', [\App\Http\Controllers\Api\AdminController::class, 'deleteUser']);
+        Route::get('/revenue', [\App\Http\Controllers\Api\AdminController::class, 'revenue']);
 
         // Admin Certificate Control
         Route::post('/certificates/{id}/revoke', [\App\Http\Controllers\Api\CertificateController::class, 'revoke']);

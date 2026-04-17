@@ -16,10 +16,11 @@ class StudentDashboardController extends Controller
     {
         $user = $request->user();
 
-        // 1. Get Active Enrollments
         $enrollments = Enrollment::with([
             'course.category',
-            'course.trainer'
+            'course.trainer',
+            'course.modules' => function($q) { $q->withCount('lessons'); },
+            'progress'
         ])
         ->where('user_id', $user->id)
         ->latest()
@@ -33,8 +34,8 @@ class StudentDashboardController extends Controller
             // Here we use a fake completion percentage based on time for demo, 
             // or we evaluate against actual progress table.
             $progressRecords = $enrollment->progress;
-            $completedCount = $progressRecords ? clone($progressRecords)->where('completed', true)->count() : 0;
-            $totalLessons = $course->modules()->withCount('lessons')->get()->sum('lessons_count');
+            $completedCount = $progressRecords ? $progressRecords->where('completed', true)->count() : 0;
+            $totalLessons = $course->modules->sum('lessons_count');
             
             $percentage = $totalLessons > 0 ? round(($completedCount / $totalLessons) * 100) : 0;
 
@@ -78,10 +79,10 @@ class StudentDashboardController extends Controller
         $course = Course::where('slug', $slug)
             ->with([
                 'modules' => function ($query) {
-                    $query->orderBy('order_idx');
+                    $query->orderBy('order');
                 },
                 'modules.lessons' => function ($query) {
-                    $query->orderBy('order_idx');
+                    $query->orderBy('order');
                 }
             ])
             ->firstOrFail();

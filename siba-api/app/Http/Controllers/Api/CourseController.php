@@ -73,7 +73,6 @@ class CourseController extends Controller
         }
 
         $course = Course::create([
-            'id' => 'c' . Str::lower(Str::random(24)),
             'title' => $validated['title'],
             'slug' => $slug,
             'description' => $validated['description'],
@@ -140,7 +139,6 @@ class CourseController extends Controller
         $lastOrder = Module::where('course_id', $course->id)->max('order') ?? 0;
 
         $module = Module::create([
-            'id' => 'c' . Str::lower(Str::random(24)),
             'title' => $validated['title'],
             'description' => $validated['description'] ?? null,
             'type' => $validated['type'] ?? 'CORE',
@@ -167,7 +165,6 @@ class CourseController extends Controller
         $lastOrder = Lesson::where('module_id', $module->id)->max('order') ?? 0;
 
         $lesson = Lesson::create([
-            'id' => 'c' . Str::lower(Str::random(24)),
             'title' => $validated['title'],
             'content' => $validated['content'],
             'video_url' => $validated['video_url'] ?? null,
@@ -192,7 +189,6 @@ class CourseController extends Controller
         ]);
 
         $category = Category::create([
-            'id' => 'c' . Str::lower(Str::random(24)),
             ...$validated,
         ]);
 

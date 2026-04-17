@@ -26,7 +26,6 @@ class AuthController extends Controller
         ]);
 
         $user = User::create([
-            'id' => 'c' . Str::lower(Str::random(24)),
             'name' => $validated['name'],
             'email' => $validated['email'],
             'password' => $validated['password'], // Auto-hashed via cast
