@@ -256,6 +256,43 @@ Training Platform/
 
 ---
 
+# 🚢 Deployment Guide
+
+SIBA is designed to be highly portable, but follow these steps to ensure peak performance in a production environment.
+
+### 🔌 1. Backend (Laravel API)
+The API can be deployed on any VPS (DigitalOcean, AWS, Linode) or Managed Laravel Hosting.
+
+1.  **Infrastructure**: Ensure PHP 8.2+, MySQL 8.0+, and Nginx are installed.
+2.  **Environment**: 
+    - Set `APP_ENV=production` & `APP_DEBUG=false`.
+    - Run `php artisan key:generate` and `php artisan jwt:secret`.
+    - Set `APP_URL` to your api subdomain (e.g., `https://api.siba.academy`).
+3.  **Optimization**:
+    ```bash
+    composer install --optimize-autoloader --no-dev
+    php artisan config:cache
+    php artisan route:cache
+    php artisan view:cache
+    ```
+4.  **Storage**: Run `php artisan storage:link` to ensure mentor images and assets are accessible.
+5.  **CORS**: Update `config/cors.php` to allow your frontend domain.
+
+### ⚛️ 2. Frontend (React SPA)
+The frontend is a static build that can be hosted on Vercel, Netlify, or Nginx.
+
+1.  **Environment**: Create `.env` and set `VITE_API_URL` to your production API URL.
+2.  **Build**:
+    ```bash
+    npm run build
+    ```
+3.  **Hosting**:
+    - **Static Hosting**: Upload the contents of the `dist` folder.
+    - **SPA Routing**: Ensure your host is configured to redirect all requests to `index.html` (standard for SPA).
+4.  **PWA**: Ensure the site is served over **HTTPS**; otherwise, the Service Worker will not register.
+
+---
+
 # 🛡️ Security Practices
 - **Middleware Guarding**: Protected routes sanitized through `CheckRole` and `JWT.auth`.
 - **Cryptographic Validation**: Public certificates verified against unique ledger signatures.
