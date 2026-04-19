@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Course;
 use App\Models\Enrollment;
+use App\Models\Certificate;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
@@ -47,40 +48,229 @@ class AdminController extends Controller
     }
 
     /**
-     * List all users with pagination
+     * Get analytics data for dashboard
+     */
+    public function analytics()
+    {
+        $activeUsers = User::where('is_active', true)->count();
+        $totalEnrollments = Enrollment::count();
+        $totalCompleted = Enrollment::where('status', 'COMPLETED')->count();
+        $completionRate = $totalEnrollments > 0 ? round(($totalCompleted / $totalEnrollments) * 100) : 0;
+        $totalCertificates = Certificate::count();
+
+        // Course completion data
+        $courseCompletionData = Course::withCount(['enrollments', 'enrollments as completed_count' => function($query) {
+            $query->where('status', 'COMPLETED');
+        }])
+        ->take(10)
+        ->get()
+        ->map(function($course) {
+            return [
+                'course' => $course->title,
+                'enrolled' => $course->enrollments_count,
+                'completed' => $course->completed_count,
+                'rate' => $course->enrollments_count > 0 
+                    ? round(($course->completed_count / $course->enrollments_count) * 100) 
+                    : 0
+            ];
+        });
+
+        // Top Performers based on progress/score
+        $topPerformers = Enrollment::with('user:id,name')
+            ->orderBy('progress', 'desc')
+            ->take(5)
+            ->get()
+            ->map(function($en) {
+                return [
+                    'name' => $en->user->name ?? 'Unknown',
+                    'course' => $en->course->title ?? 'Deleted Course',
+                    'score' => round($en->progress), 
+                    'badge' => ''
+                ];
+            });
+
+        // User Growth (last 12 months)
+        $userGrowth = [];
+        for ($i = 0; $i < 12; $i++) {
+            $month = now()->subMonths($i);
+            $count = User::whereMonth('created_at', $month->month)
+                ->whereYear('created_at', $month->year)
+                ->count();
+            
+            $userGrowth[] = [
+                'label' => $month->format('M'),
+                'value' => $count
+            ];
+        }
+
+        return response()->json([
+            'stats' => [
+                'activeUsers' => $activeUsers,
+                'completionRate' => $completionRate,
+                'avgSession' => '42m', 
+                'certificatesIssued' => $totalCertificates
+            ],
+            'courseCompletionData' => $courseCompletionData,
+            'topPerformers' => $topPerformers,
+            'userGrowth' => array_reverse($userGrowth)
+        ]);
+    }
+
+    /**
+     * Revenue dashboard data
+     */
+    public function revenue()
+    {
+        $totalRevenue = Enrollment::join('courses', 'enrollments.course_id', '=', 'courses.id')
+            ->sum('courses.price');
+            
+        $recentTransactions = Enrollment::with(['user', 'course'])
+            ->latest()
+            ->take(10)
+            ->get()
+            ->map(function($en) {
+                return [
+                    'id' => $en->id,
+                    'student' => $en->user->name ?? 'Unknown',
+                    'course' => $en->course->title ?? 'Deleted Course',
+                    'amount' => $en->course->price ?? 0,
+                    'date' => $en->created_at->format('Y-m-d'),
+                    'type' => 'enrollment'
+                ];
+            });
+
+        $trend = [];
+        for ($i = 0; $i < 12; $i++) {
+            $month = now()->subMonths($i);
+            $rev = Enrollment::join('courses', 'enrollments.course_id', '=', 'courses.id')
+                ->whereMonth('enrollments.created_at', $month->month)
+                ->whereYear('enrollments.created_at', $month->year)
+                ->sum('courses.price');
+                
+            $trend[] = [
+                'month' => $month->format('M'),
+                'revenue' => $rev
+            ];
+        }
+
+        return response()->json([
+            'totalRevenue' => $totalRevenue,
+            'thisMonth' => $trend[0]['revenue'],
+            'transactionsCount' => Enrollment::count(),
+            'avgOrderValue' => Enrollment::count() > 0 ? $totalRevenue / Enrollment::count() : 0,
+            'transactions' => $recentTransactions,
+            'trend' => array_reverse($trend)
+        ]);
+    }
+
+    /**
+     * Export revenue data to CSV
+     */
+    public function exportRevenue(Request $request)
+    {
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="siba_revenue_' . date('Y-m-d') . '.csv"',
+            'Pragma' => 'no-cache',
+            'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
+            'Expires' => '0',
+        ];
+
+        $transactions = Enrollment::with(['user:id,name', 'course:id,title'])
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        $callback = function() use ($transactions) {
+            $file = fopen('php://output', 'w');
+            fputcsv($file, ['ID', 'Student', 'Course', 'Amount', 'Date', 'Status']);
+
+            foreach ($transactions as $tx) {
+                fputcsv($file, [
+                    $tx->id,
+                    $tx->user->name ?? 'N/A',
+                    $tx->course->title ?? 'N/A',
+                    $tx->course->price ?? 0,
+                    $tx->created_at->format('Y-m-d H:i:s'),
+                    $tx->status
+                ]);
+            }
+            fclose($file);
+        };
+
+        return response()->stream($callback, 200, $headers);
+    }
+
+    /**
+     * User management
      */
     public function users(Request $request)
     {
-        $users = User::latest()->paginate(20);
-        return response()->json($users);
+        $query = User::latest();
+        if ($request->has('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%");
+            });
+        }
+        return response()->json(['users' => $query->get()]);
     }
 
-    /**
-     * Update user role
-     */
-    public function updateRole(Request $request, $id)
+    public function storeUser(Request $request)
     {
-        $request->validate([
-            'role' => 'required|in:STUDENT,TRAINER,MENTOR,ADMIN'
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:8',
+            'role' => 'required|in:STUDENT,TRAINER,MENTOR,ADMIN',
         ]);
 
-        $user = User::findOrFail($id);
-        $user->role = $request->role;
-        $user->save();
+        $user = User::create([
+            ...$validated,
+            'is_active' => true,
+        ]);
 
+        return response()->json(['success' => true, 'user' => $user], 201);
+    }
+
+    public function updateUser(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => "required|string|email|max:255|unique:users,email,{$id}",
+            'role' => 'required|in:STUDENT,TRAINER,MENTOR,ADMIN',
+        ]);
+
+        $user->update($validated);
         return response()->json(['success' => true, 'user' => $user]);
     }
 
-    /**
-     * Delete user
-     */
+    public function toggleUserStatus($id)
+    {
+        $user = User::findOrFail($id);
+        if (auth()->id() === $user->id) return response()->json(['error' => 'Self-deactivation denied.'], 400);
+        $user->is_active = !$user->is_active;
+        $user->save();
+        return response()->json(['success' => true, 'is_active' => $user->is_active]);
+    }
+
+    public function bulkUpdateRole(Request $request)
+    {
+        $validated = $request->validate([
+            'user_ids' => 'required|array',
+            'user_ids.*' => 'exists:users,id',
+            'role' => 'required|in:STUDENT,TRAINER,MENTOR,ADMIN',
+        ]);
+
+        User::whereIn('id', $validated['user_ids'])->update(['role' => $validated['role']]);
+        return response()->json(['success' => true]);
+    }
+
     public function deleteUser($id)
     {
         $user = User::findOrFail($id);
-        // Prevent deleting self
-        if (auth()->id() === $user->id) {
-            return response()->json(['error' => 'Cannot delete yourself.'], 400);
-        }
+        if (auth()->id() === $user->id) return response()->json(['error' => 'Self-deletion denied.'], 400);
         $user->delete();
         return response()->json(['success' => true]);
     }

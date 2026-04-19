@@ -18,8 +18,8 @@ export function PublicFooter() {
       { label: "Verification", href: "/verify-certificate" },
     ],
     legal: [
-      { label: "Terms of Service", href: "#" },
-      { label: "Privacy Policy", href: "#" },
+      { label: "Terms of Service", href: "/terms" },
+      { label: "Privacy Policy", href: "/privacy" },
     ]
   };
 
@@ -33,16 +33,19 @@ export function PublicFooter() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 md:gap-12 lg:gap-8 mb-12 md:mb-16 lg:mb-24">
           
           {/* Brand Column */}
-          <div className="lg:col-span-4 space-y-6 md:space-y-10">
-            <Link to="/" className="inline-block transition-transform transition-all active:scale-95 duration-[var(--duration-fast)]">
-              <Logo className="scale-110 sm:scale-125 origin-left" />
-            </Link>
+          <div className="lg:col-span-4 space-y-8 md:space-y-10">
+            <Logo size="lg" className="origin-left transition-all active:scale-95 duration-[var(--duration-fast)]" />
             <p className="text-[var(--text-secondary)] leading-[1.8] max-w-sm text-sm md:text-[15px] opacity-70">
               Bangladesh&apos;s first Non-profit Academy built to modernize professional systems through elite IT integration and scalable business architectures.
             </p>
             <div className="flex items-center gap-2 sm:gap-3">
-              {[Globe, ExternalLink, User, Mail].map((Icon, i) => (
-                <a key={i} href="#" className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-[14px] bg-[var(--bg-secondary)] border border-[var(--border-primary)] flex items-center justify-center text-[var(--text-muted)] hover:text-[var(--brand-500)] hover:border-[var(--brand-500)] hover:-translate-y-1 transition-all duration-[var(--duration-fast)] ease-[var(--ease-out-premium)] touch-target" aria-label={`Social link ${i + 1}`}>
+              {[
+                { Icon: Globe, href: "https://sheraziit.com/" }, 
+                { Icon: ExternalLink, href: "https://www.facebook.com/SheraziitofficiaI/" }, 
+                { Icon: User, href: "/login" }, 
+                { Icon: Mail, href: "mailto:contact@sheraziit.com" }
+              ].map(({Icon, href}, i) => (
+                <a key={i} href={href} target={href.startsWith("http") ? "_blank" : "_self"} rel="noreferrer" className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-[14px] bg-[var(--bg-secondary)] border border-[var(--border-primary)] flex items-center justify-center text-[var(--text-muted)] hover:text-[var(--brand-500)] hover:border-[var(--brand-500)] hover:-translate-y-1 transition-all duration-[var(--duration-fast)] ease-[var(--ease-out-premium)] touch-target" aria-label={`Social link ${i + 1}`}>
                   <Icon className="w-4 h-4 sm:w-5 sm:h-5" />
                 </a>
               ))}

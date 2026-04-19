@@ -40,6 +40,85 @@ class DatabaseSeeder extends Seeder
             'level' => 'EXPERT',
         ]);
 
+        // ─── MENTORS ───────────────────────────────────────────
+        $mentorsData = [
+            [
+                'name' => 'Nobin Bonik',
+                'email' => 'nobin@siba.academy',
+                'role' => 'MENTOR',
+                'avatar' => '/images/mentors/nobin.jpg',
+                'bio' => 'The mastermind behind brand soul and rapid growth trajectory. Nobin architectures brand identity and rapid growth trajectories with surgical precision.',
+                'phone' => '8801846044470',
+                'skills' => ["Brand Strategy Architect", "Business Architect", "Performance Marketing & Growth Lead"],
+                'level' => 'EXPERT',
+            ],
+            [
+                'name' => 'Shahanewas Shawon',
+                'email' => 'shawon@siba.academy',
+                'role' => 'MENTOR',
+                'avatar' => '/images/mentors/shahanewas.jpg',
+                'bio' => 'Architecting the invisible systems that power modern enterprise. Shahanewas builds high-performance digital foundations and seamless automated workflows.',
+                'phone' => '8801770921384',
+                'skills' => ["Digital Infrastructure Specialist", "Software and Technical Architect", "Automation Design"],
+                'level' => 'EXPERT',
+            ],
+            [
+                'name' => 'Rasel Ahmed',
+                'email' => 'rasel@siba.academy',
+                'role' => 'MENTOR',
+                'avatar' => '/images/mentors/rasel.jpg',
+                'bio' => 'Transforming raw numbers into strategic power. Rasel specializes in financial realism and surgical data precision for sustainable scaling.',
+                'phone' => '8801841011224',
+                'skills' => ["Economics Specialist", "Financial Realist", "Data Analytics & Tracking Scientist"],
+                'level' => 'EXPERT',
+            ],
+            [
+                'name' => 'Rumel Ahmmed',
+                'email' => 'rumel@siba.academy',
+                'role' => 'MENTOR',
+                'avatar' => '/images/mentors/rumel.jpg',
+                'bio' => 'Driving sustainable revenue through deep analysis and elite retention frameworks. Rumel builds sustainable revenue engines by capturing and keeping growth.',
+                'phone' => '8801955240211',
+                'skills' => ["Business Development", "Business Analysis", "Sales & Retention Strategist"],
+                'level' => 'EXPERT',
+            ],
+            [
+                'name' => 'S.M. Faiaz Tamim',
+                'email' => 'tamim@siba.academy',
+                'role' => 'MENTOR',
+                'avatar' => '/images/mentors/tamim.jpg',
+                'bio' => 'Bridging technical complexity with operational clarity. Faiaz specializes in real-world demonstrations and feedback loops.',
+                'phone' => '8801952387346',
+                'skills' => ["Operations & Automation Expert", "Technical Demonstrator", "Feedback Specialist"],
+                'level' => 'EXPERT',
+            ],
+            [
+                'name' => 'Mushfiqur Rahman',
+                'email' => 'mushfiq@siba.academy',
+                'role' => 'MENTOR',
+                'avatar' => '/images/mentors/mushfiq.jpg',
+                'bio' => 'Navigating the complex landscape of business automation. Mushfiq specializes in situational orientation and deep_case study analysis.',
+                'phone' => '8801929324580',
+                'skills' => ["Operations & Automation Expert", "Context & Orientation Guide", "Case Study Analyst"],
+                'level' => 'EXPERT',
+            ],
+        ];
+
+        foreach ($mentorsData as $m) {
+            User::create([
+                'id' => $this->cuid(),
+                'name' => $m['name'],
+                'email' => $m['email'],
+                'password' => 'password',
+                'role' => 'MENTOR',
+                'avatar' => $m['avatar'],
+                'bio' => $m['bio'],
+                'phone' => $m['phone'],
+                'skills' => $m['skills'],
+                'level' => $m['level'],
+            ]);
+        }
+
         // ─── CATEGORIES ─────────────────────────────────────────
         $catBiz = Category::create(['id' => $this->cuid(), 'name' => 'Business Strategy', 'icon' => 'Briefcase', 'color' => '#10b981']);
         $catAuto = Category::create(['id' => $this->cuid(), 'name' => 'Automation', 'icon' => 'Zap', 'color' => '#6366f1']);
@@ -151,7 +230,7 @@ class DatabaseSeeder extends Seeder
                 'title' => $cData['title'],
                 'slug' => $cData['slug'],
                 'description' => $cData['description'],
-                'price' => 0,
+                'price' => rand(49, 199),
                 'level' => 'BEGINNER',
                 'published' => true,
                 'featured' => $cData['featured'],

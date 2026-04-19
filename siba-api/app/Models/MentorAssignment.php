@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasCuid;
+
 use Illuminate\Database\Eloquent\Model;
 
 class MentorAssignment extends Model
 {
+    use HasCuid;
     public $incrementing = false;
     protected $keyType = 'string';
     protected $fillable = ['id', 'mentor_id', 'student_id', 'course_id'];

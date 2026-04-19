@@ -32,7 +32,6 @@ class EnrollmentController extends Controller
         }
 
         $enrollment = Enrollment::create([
-            'id' => 'c' . Str::lower(Str::random(24)),
             'user_id' => $userId,
             'course_id' => $validated['course_id'],
             'status' => 'ACTIVE',
@@ -41,14 +40,12 @@ class EnrollmentController extends Controller
 
         // Log activity
         ActivityLog::create([
-            'id' => 'c' . Str::lower(Str::random(24)),
             'user_id' => $userId,
             'action' => 'ENROLLMENT',
             'details' => json_encode(['course_id' => $validated['course_id']]),
         ]);
 
         \App\Models\Notification::create([
-            'id' => 'c' . Str::lower(Str::random(24)),
             'user_id' => $userId,
             'type' => 'ENROLLMENT',
             'title' => 'Enrollment Successful',

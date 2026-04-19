@@ -12,6 +12,7 @@ Route::post('/login', [AuthController::class, 'login']);
 // Public catalog (no auth needed)
 Route::get('/courses', [CourseController::class, 'index']);
 Route::get('/courses/{slug}', [CourseController::class, 'show']);
+Route::get('/mentors', [\App\Http\Controllers\Api\MentorController::class, 'index']);
 Route::get('/certificate/verify/{certificate_no}', [\App\Http\Controllers\Api\CertificateController::class, 'verify']);
 
 // ─── AUTHENTICATED ROUTES ───────────────────────────────────────
@@ -48,10 +49,17 @@ Route::middleware('auth:api')->group(function () {
     Route::middleware('role:ADMIN')->prefix('admin')->group(function () {
         Route::get('/stats', [\App\Http\Controllers\Api\AdminController::class, 'stats']);
         Route::get('/users', [\App\Http\Controllers\Api\AdminController::class, 'users']);
+        Route::post('/users', [\App\Http\Controllers\Api\AdminController::class, 'storeUser']);
+        Route::put('/users/{id}', [\App\Http\Controllers\Api\AdminController::class, 'updateUser']);
+        Route::post('/users/bulk-role', [\App\Http\Controllers\Api\AdminController::class, 'bulkUpdateRole']);
+        Route::post('/users/{id}/toggle-status', [\App\Http\Controllers\Api\AdminController::class, 'toggleUserStatus']);
         Route::patch('/users/{id}/role', [\App\Http\Controllers\Api\AdminController::class, 'updateRole']);
         Route::delete('/users/{id}', [\App\Http\Controllers\Api\AdminController::class, 'deleteUser']);
+        Route::get('/revenue', [\App\Http\Controllers\Api\AdminController::class, 'revenue']);
+        Route::get('/revenue/export', [\App\Http\Controllers\Api\AdminController::class, 'exportRevenue']);
 
         // Admin Certificate Control
+        Route::post('/certificates', [\App\Http\Controllers\Api\CertificateController::class, 'store']);
         Route::post('/certificates/{id}/revoke', [\App\Http\Controllers\Api\CertificateController::class, 'revoke']);
         Route::post('/certificates/{id}/reissue', [\App\Http\Controllers\Api\CertificateController::class, 'reissue']);
     });
@@ -66,12 +74,26 @@ Route::middleware('auth:api')->group(function () {
     });
 
     // Admin/Trainer routes
-    Route::get('/trainer/dashboard', [\App\Http\Controllers\Api\TrainerDashboardController::class, 'index']);
+    Route::get('/trainer/dashboard', [TrainerDashboardController::class, 'index']);
+    Route::get('/trainer/students', [TrainerDashboardController::class, 'students']);
     Route::post('/courses', [CourseController::class, 'store']);
     Route::put('/courses/{course}', [CourseController::class, 'update']);
     Route::delete('/courses/{course}', [CourseController::class, 'destroy']);
     Route::post('/courses/{course}/toggle-publish', [CourseController::class, 'togglePublish']);
     Route::post('/courses/{course}/modules', [CourseController::class, 'createModule']);
+    Route::patch('/modules/{module}', [CourseController::class, 'updateModule']);
+    Route::delete('/modules/{module}', [CourseController::class, 'deleteModule']);
+    Route::post('/courses/{course}/modules/reorder', [CourseController::class, 'reorderModules']);
+    
     Route::post('/modules/{module}/lessons', [CourseController::class, 'createLesson']);
+    Route::patch('/lessons/{lesson}', [CourseController::class, 'updateLesson']);
+    Route::delete('/lessons/{lesson}', [CourseController::class, 'deleteLesson']);
+    Route::post('/modules/{module}/lessons/reorder', [CourseController::class, 'reorderLessons']);
     Route::post('/categories', [CourseController::class, 'createCategory']);
+    
+    // Quiz Management & Submissions
+    Route::post('/modules/{module}/quizzes', [CourseController::class, 'storeQuiz']);
+    Route::patch('/quizzes/{quiz}', [CourseController::class, 'updateQuiz']);
+    Route::delete('/quizzes/{quiz}', [CourseController::class, 'deleteQuiz']);
+    Route::post('/quizzes/{quiz}/submit', [\App\Http\Controllers\Api\QuizController::class, 'submit']);
 });

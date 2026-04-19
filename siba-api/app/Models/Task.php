@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasCuid;
+
 use Illuminate\Database\Eloquent\Model;
 
 class Task extends Model
 {
+    use HasCuid;
     public $incrementing = false;
     protected $keyType = 'string';
     protected $fillable = ['id', 'title', 'instructions', 'rubric', 'due_date', 'type', 'max_score', 'module_id'];

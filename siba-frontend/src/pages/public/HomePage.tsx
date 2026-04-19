@@ -1,6 +1,7 @@
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { useQuery } from '@tanstack/react-query';
 import api from '@/lib/axios';
+import { useAuthStore } from '@/store/useAuthStore';
 import { Button } from "@/components/ui/button";
 import { formatCurrency } from "@/lib/utils";
 import {
@@ -15,6 +16,7 @@ import {
   Target,
   BarChart3,
   Rocket,
+  Loader2,
 } from "lucide-react";
 
 const features = [
@@ -93,6 +95,8 @@ const mentorsList = [
 ];
 
 export default function HomePage() {
+  const { isAuthenticated, user, isLoading } = useAuthStore();
+
   const { data: catalogData } = useQuery({
     queryKey: ['public-courses'],
     queryFn: async () => {
@@ -102,6 +106,17 @@ export default function HomePage() {
   });
 
   const featuredCourses = catalogData?.courses?.slice(0, 3) || [];
+
+  if (isLoading) {
+    return <div className="min-h-[100dvh] flex items-center justify-center bg-[var(--bg-primary)]">
+       <Loader2 className="w-8 h-8 animate-spin text-[var(--brand-500)]" />
+    </div>;
+  }
+
+  // Redirect to dashboard if logged in
+  if (isAuthenticated && user) {
+     return <Navigate to={`/dashboard/${user.role.toLowerCase()}`} replace />;
+  }
 
   return (
     <div className="min-h-[100dvh] w-full max-w-[100vw] overflow-x-hidden bg-[var(--bg-primary)] selection:bg-[var(--brand-500)] selection:text-white">

@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasCuid;
+
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
 class AiUsageLog extends Model
 {
+    use HasCuid;
     public $incrementing = false;
     protected $keyType = 'string';
 
