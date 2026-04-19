@@ -1,8 +1,9 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { StatCard } from '@/components/dashboard/stat-card';
-import { ArrowUpRight, ArrowDownRight, Loader2 } from 'lucide-react';
+import { ArrowUpRight, ArrowDownRight, Loader2, Download, FileText } from 'lucide-react';
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '@/lib/axios';
+import { Button } from '@/components/ui/button';
 
 export default function RevenuePage() {
   const [data, setData] = useState<any>(null);
@@ -11,10 +12,7 @@ export default function RevenuePage() {
   useEffect(() => {
     const fetchRevenue = async () => {
       try {
-        const token = localStorage.getItem('siba_auth_token');
-        const response = await axios.get("http://localhost:8000/api/admin/revenue", {
-          headers: { Authorization: `Bearer ${token}` }
-        });
+        const response = await api.get("/api/admin/revenue");
         setData(response.data);
       } catch (error) {
         console.error("Failed to fetch revenue data", error);
@@ -24,6 +22,23 @@ export default function RevenuePage() {
     };
     fetchRevenue();
   }, []);
+
+  const handleExport = async () => {
+    try {
+      const response = await api.get('/api/admin/revenue/export', {
+        responseType: 'blob',
+      });
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `siba_revenue_${new Date().toISOString().split('T')[0]}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    } catch (error) {
+      alert("Failed to export revenue data.");
+    }
+  };
 
   if (loading) {
     return (
@@ -36,9 +51,19 @@ export default function RevenuePage() {
 
   return (
     <div className="space-y-8 animate-in fade-in duration-500">
-      <div>
-        <h1 className="text-3xl font-bold text-[var(--text-primary)]">Revenue Dashboard</h1>
-        <p className="text-[var(--text-secondary)] mt-1">Financial overview and transaction history.</p>
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-bold text-[var(--text-primary)]">Revenue Dashboard</h1>
+          <p className="text-[var(--text-secondary)] mt-1">Financial overview and transaction history.</p>
+        </div>
+        <Button 
+          variant="outline" 
+          className="h-11 rounded-xl px-5 gap-2 border-[var(--brand-500)]/30 text-[var(--brand-500)] hover:bg-[var(--brand-500)]/10"
+          onClick={handleExport}
+        >
+          <Download className="w-4 h-4" />
+          Export CSV
+        </Button>
       </div>
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">

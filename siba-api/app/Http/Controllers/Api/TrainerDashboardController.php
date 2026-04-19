@@ -50,4 +50,29 @@ class TrainerDashboardController extends Controller
             })
         ]);
     }
+
+    public function students(Request $request)
+    {
+        $user = $request->user();
+
+        $students = Enrollment::with(['user:id,name,email,avatar', 'course:id,title'])
+            ->whereHas('course', function($q) use ($user) {
+                $q->where('trainer_id', $user->id);
+            })
+            ->latest()
+            ->get()
+            ->map(function($enrollment) {
+                return [
+                    'id' => $enrollment->id,
+                    'user_id' => $enrollment->user->id,
+                    'name' => $enrollment->user->name,
+                    'email' => $enrollment->user->email,
+                    'course' => $enrollment->course->title,
+                    'progress' => $enrollment->progress,
+                    'lastActive' => $enrollment->updated_at->diffForHumans(),
+                ];
+            });
+
+        return response()->json($students);
+    }
 }

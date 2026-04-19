@@ -12,14 +12,28 @@ use Illuminate\Support\Str;
 class CertificateController extends Controller
 {
     /**
-     * Get all certificates for the authenticated user
+     * Get all certificates (Admin or User)
      */
     public function index(Request $request)
     {
-        $certificates = Certificate::where('user_id', $request->user()->id)
-            ->with('course')
-            ->orderBy('created_at', 'desc')
-            ->get();
+        $query = Certificate::with(['course', 'user']);
+
+        // If not admin, only show own
+        if ($request->user()->role !== 'ADMIN') {
+            $query->where('user_id', $request->user()->id);
+        }
+
+        if ($request->has('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('certificate_no', 'like', "%{$search}%")
+                  ->orWhereHas('user', function($uq) use ($search) {
+                      $uq->where('name', 'like', "%{$search}%");
+                  });
+            });
+        }
+
+        $certificates = $query->orderBy('created_at', 'desc')->get();
 
         return response()->json([
             'certificates' => $certificates
@@ -47,6 +61,50 @@ class CertificateController extends Controller
             'status' => 'verified',
             'certificate' => $certificate
         ]);
+    }
+
+    /**
+     * Admin: Manually issue a certificate
+     */
+    public function store(Request $request)
+    {
+        if ($request->user()->role !== 'ADMIN') {
+            return response()->json(['error' => 'Unauthorized'], 403);
+        }
+
+        $validated = $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'course_id' => 'required|exists:courses,id',
+            'issue_date' => 'nullable|date',
+            'certificate_no' => 'nullable|string|unique:certificates,certificate_no',
+        ]);
+
+        $certNo = $validated['certificate_no'] ?? ('SIBA-' . date('Y') . '-' . strtoupper(Str::random(8)));
+        
+        $certificate = Certificate::create([
+            'id' => 'cert_' . Str::lower(Str::random(24)),
+            'certificate_no' => $certNo,
+            'verification_hash' => hash('sha256', $certNo . Str::random(10)),
+            'user_id' => $validated['user_id'],
+            'course_id' => $validated['course_id'],
+            'issue_date' => $validated['issue_date'] ?? now(),
+            'status' => 'issued',
+        ]);
+
+        // Create notification for student
+        Notification::create([
+            'id' => 'notif_' . Str::lower(Str::random(24)),
+            'user_id' => $validated['user_id'],
+            'type' => 'CERTIFICATE_ISSUED',
+            'title' => 'Certificate Issued!',
+            'message' => "An administrator has issued your certificate.",
+            'read' => false,
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'certificate' => $certificate->load(['user', 'course'])
+        ], 201);
     }
 
     /**

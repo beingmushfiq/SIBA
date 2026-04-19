@@ -13,10 +13,29 @@ import {
   User, 
   BookOpen, 
   CheckCircle2, 
-  AlertTriangle 
+  AlertTriangle,
+  PlusCircle,
+  Calendar as CalendarIcon
 } from 'lucide-react';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { 
+  Dialog, 
+  DialogContent, 
+  DialogHeader, 
+  DialogTitle, 
+  DialogFooter,
+  DialogDescription
+} from '@/components/ui/dialog';
+import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
+import { 
+  Select, 
+  SelectContent, 
+  SelectItem, 
+  SelectTrigger, 
+  SelectValue 
+} from '@/components/ui/select';
 
 interface ICertificate {
   id: string;
@@ -30,17 +49,67 @@ interface ICertificate {
 export default function CertificateControl() {
   const queryClient = useQueryClient();
   const [searchTerm, setSearchTerm] = useState('');
+  const [isIssueModalOpen, setIsIssueModalOpen] = useState(false);
+  const [newCert, setNewCert] = useState({
+    user_id: '',
+    course_id: '',
+    issue_date: new Date().toISOString().split('T')[0],
+    certificate_no: ''
+  });
 
   const { data, isLoading } = useQuery({
-    queryKey: ['admin-certificates'],
+    queryKey: ['admin-certificates', searchTerm],
     queryFn: async () => {
-      const response = await api.get('/api/certificates'); // Initially just getting all? 
-      // Note: Backend index returns current user's. 
-      // I need an admin endpoint maybe or query params. 
-      // For now, I'll assume we might need a dedicated admin index.
+      const response = await api.get('/api/certificates', {
+        params: { search: searchTerm }
+      });
       return response.data;
     }
   });
+
+  // Fetch users and courses for the modal
+  const { data: usersData } = useQuery({
+    queryKey: ['admin-users-list'],
+    queryFn: async () => {
+      const response = await api.get('/api/admin/users');
+      return response.data;
+    },
+    enabled: isIssueModalOpen
+  });
+
+  const { data: coursesData } = useQuery({
+    queryKey: ['admin-courses-list'],
+    queryFn: async () => {
+      const response = await api.get('/api/courses');
+      return response.data;
+    },
+    enabled: isIssueModalOpen
+  });
+
+  const issueMutation = useMutation({
+    mutationFn: async (certData: typeof newCert) => {
+      const response = await api.post('/api/admin/certificates', certData);
+      return response.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['admin-certificates'] });
+      setIsIssueModalOpen(false);
+      setNewCert({ user_id: '', course_id: '', issue_date: new Date().toISOString().split('T')[0], certificate_no: '' });
+      alert('Certificate issued successfully!');
+    },
+    onError: (error: any) => {
+      alert(error.response?.data?.message || 'Failed to issue certificate');
+    }
+  });
+
+  const handleIssueCert = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newCert.user_id || !newCert.course_id) {
+        alert("Please select both a student and a course.");
+        return;
+    }
+    issueMutation.mutate(newCert);
+  };
 
   const revokeMutation = useMutation({
     mutationFn: async (id: string) => {
@@ -84,17 +153,113 @@ export default function CertificateControl() {
           <p className="text-[var(--text-secondary)] mt-1">Manage global credentials and verify authenticity.</p>
         </div>
         
-        <div className="relative w-full md:w-96">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-muted)]" />
-          <input 
-            type="text" 
-            placeholder="Search by ID or Name..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full h-11 pl-10 pr-4 rounded-xl bg-[var(--bg-secondary)] border border-[var(--border-secondary)] focus:outline-none focus:border-[var(--brand-500)] transition-all"
-          />
+        <div className="flex gap-3 w-full md:w-auto">
+          <div className="relative flex-1 md:w-80">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-muted)]" />
+            <input 
+              type="text" 
+              placeholder="Search by ID or Name..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full h-11 pl-10 pr-4 rounded-xl bg-[var(--bg-secondary)] border border-[var(--border-secondary)] focus:outline-none focus:border-[var(--brand-500)] transition-all"
+            />
+          </div>
+          <Button 
+            className="h-11 rounded-xl px-4 flex gap-2"
+            onClick={() => setIsIssueModalOpen(true)}
+          >
+            <PlusCircle className="w-4 h-4" />
+            <span className="hidden sm:inline">Issue New</span>
+          </Button>
         </div>
       </div>
+
+      <Dialog open={isIssueModalOpen} onOpenChange={setIsIssueModalOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Issue Manual Certificate</DialogTitle>
+            <DialogDescription>
+              Grant a certificate to a student manually for a specific course.
+            </DialogDescription>
+          </DialogHeader>
+          <form onSubmit={handleIssueCert} className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label>Select Student</Label>
+              <Select 
+                value={newCert.user_id} 
+                onValueChange={(value) => setNewCert({...newCert, user_id: value})}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Choose a student" />
+                </SelectTrigger>
+                <SelectContent>
+                  {(usersData?.users || []).map((u: any) => (
+                    <SelectItem key={u.id} value={u.id}>{u.name} ({u.email})</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label>Target Course</Label>
+              <Select 
+                value={newCert.course_id} 
+                onValueChange={(value) => setNewCert({...newCert, course_id: value})}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Choose a course" />
+                </SelectTrigger>
+                <SelectContent>
+                  {(coursesData?.courses || []).map((c: any) => (
+                    <SelectItem key={c.id} value={c.id}>{c.title}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="issue_date">Issue Date</Label>
+              <Input 
+                id="issue_date" 
+                type="date" 
+                value={newCert.issue_date}
+                onChange={(e) => setNewCert({...newCert, issue_date: e.target.value})}
+                required
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="cert_no">Custom Cert # (Optional)</Label>
+              <Input 
+                id="cert_no" 
+                placeholder="Leave blank for auto-generation" 
+                value={newCert.certificate_no}
+                onChange={(e) => setNewCert({...newCert, certificate_no: e.target.value})}
+              />
+            </div>
+            <DialogFooter className="pt-4">
+              <Button 
+                type="button" 
+                variant="outline" 
+                onClick={() => setIsIssueModalOpen(false)}
+                disabled={issueMutation.isPending}
+              >
+                Cancel
+              </Button>
+              <Button 
+                type="submit"
+                disabled={issueMutation.isPending}
+              >
+                {issueMutation.isPending ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    Issuing...
+                  </>
+                ) : (
+                  'Confirm Issuance'
+                )}
+              </Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
 
       <div className="grid grid-cols-1 gap-4">
         {filteredCerts.length === 0 ? (

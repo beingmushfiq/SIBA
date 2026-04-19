@@ -4,22 +4,99 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { StatCard } from '@/components/dashboard/stat-card';
-import {
+import { 
   BookOpen, Search, Plus, Loader2, Eye, EyeOff,
-  Users, DollarSign
+  Users, DollarSign, ChevronRight, BarChart3,
+  Trash2, Edit, Save
 } from 'lucide-react';
 import { useState } from 'react';
+import { 
+  Dialog, 
+  DialogContent, 
+  DialogHeader, 
+  DialogTitle, 
+  DialogFooter,
+  DialogDescription
+} from '@/components/ui/dialog';
+import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
+import { 
+  Select, 
+  SelectContent, 
+  SelectItem, 
+  SelectTrigger, 
+  SelectValue 
+} from '@/components/ui/select';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 export default function AdminCoursesPage() {
+  const queryClient = useQueryClient();
   const [searchTerm, setSearchTerm] = useState('');
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [newCourse, setNewCourse] = useState({
+    title: '',
+    description: '',
+    level: 'BEGINNER',
+    price: 0,
+    category_id: '',
+    trainer_id: ''
+  });
 
   const { data, isLoading } = useQuery({
-    queryKey: ['admin-courses'],
+    queryKey: ['admin-courses', searchTerm],
     queryFn: async () => {
-      const response = await api.get('/api/courses');
+      const response = await api.get('/api/courses'); // Note: categories are also here
       return response.data;
     }
   });
+
+  const { data: trainersData } = useQuery({
+    queryKey: ['admin-trainers-list'],
+    queryFn: async () => {
+      const response = await api.get('/api/admin/users'); // We can filter by role in UI or fetch specific
+      return response.data;
+    },
+    enabled: isAddModalOpen
+  });
+
+  const createCourseMutation = useMutation({
+    mutationFn: async (payload: typeof newCourse) => {
+      const response = await api.post('/api/courses', payload);
+      return response.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['admin-courses'] });
+      setIsAddModalOpen(false);
+      setNewCourse({ title: '', description: '', level: 'BEGINNER', price: 0, category_id: '', trainer_id: '' });
+      alert('Course created successfully!');
+    },
+    onError: (error: any) => {
+      alert(error.response?.data?.message || 'Failed to create course');
+    }
+  });
+
+  const deleteCourseMutation = useMutation({
+    mutationFn: async (id: string) => {
+      await api.delete(`/api/courses/${id}`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['admin-courses'] });
+    }
+  });
+
+  const togglePublishMutation = useMutation({
+    mutationFn: async (id: string) => {
+      await api.post(`/api/courses/${id}/toggle-publish`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['admin-courses'] });
+    }
+  });
+
+  const handleCreateCourse = (e: React.FormEvent) => {
+    e.preventDefault();
+    createCourseMutation.mutate(newCourse);
+  };
 
   if (isLoading) {
     return (
@@ -55,11 +132,130 @@ export default function AdminCoursesPage() {
         </div>
         <Button 
           className="h-11 rounded-xl px-5 gap-2"
-          onClick={() => alert("Navigate to Course Editor")}
+          onClick={() => setIsAddModalOpen(true)}
         >
           <Plus className="w-4 h-4" /> Create Course
         </Button>
       </div>
+
+      <Dialog open={isAddModalOpen} onOpenChange={setIsAddModalOpen}>
+        <DialogContent className="sm:max-w-xl">
+          <DialogHeader>
+            <DialogTitle>Quick Create Course</DialogTitle>
+            <DialogDescription>
+              Initialize a new course. You can add modules and lessons later in the editor.
+            </DialogDescription>
+          </DialogHeader>
+          <form onSubmit={handleCreateCourse} className="space-y-4 py-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="col-span-2 space-y-2">
+                <Label htmlFor="title">Course Title</Label>
+                <Input 
+                  id="title" 
+                  placeholder="e.g. Advanced AI Integration" 
+                  value={newCourse.title}
+                  onChange={(e) => setNewCourse({...newCourse, title: e.target.value})}
+                  required
+                />
+              </div>
+              <div className="col-span-2 space-y-2">
+                <Label htmlFor="description">Short Description</Label>
+                <Input 
+                  id="description" 
+                  placeholder="Briefly describe what students will learn..." 
+                  value={newCourse.description}
+                  onChange={(e) => setNewCourse({...newCourse, description: e.target.value})}
+                  required
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>Difficulty Level</Label>
+                <Select 
+                  value={newCourse.level} 
+                  onValueChange={(val) => setNewCourse({...newCourse, level: val})}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select level" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="BEGINNER">Beginner</SelectItem>
+                    <SelectItem value="INTERMEDIATE">Intermediate</SelectItem>
+                    <SelectItem value="ADVANCED">Advanced</SelectItem>
+                    <SelectItem value="EXPERT">Expert</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="price">Price (USD)</Label>
+                <Input 
+                  id="price" 
+                  type="number" 
+                  value={newCourse.price}
+                  onChange={(e) => setNewCourse({...newCourse, price: parseFloat(e.target.value)})}
+                  required
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>Category</Label>
+                <Select 
+                  value={newCourse.category_id} 
+                  onValueChange={(val) => setNewCourse({...newCourse, category_id: val})}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select category" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {(categories || []).map((cat: any) => (
+                      <SelectItem key={cat.id} value={cat.id}>{cat.name}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label>Primary Trainer</Label>
+                <Select 
+                  value={newCourse.trainer_id} 
+                  onValueChange={(val) => setNewCourse({...newCourse, trainer_id: val})}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Assign trainer" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {(trainersData?.users || [])
+                      .filter((u: any) => u.role === 'TRAINER' || u.role === 'ADMIN')
+                      .map((u: any) => (
+                        <SelectItem key={u.id} value={u.id}>{u.name}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+            <DialogFooter className="pt-4">
+              <Button 
+                type="button" 
+                variant="outline" 
+                onClick={() => setIsAddModalOpen(false)}
+                disabled={createCourseMutation.isPending}
+              >
+                Cancel
+              </Button>
+              <Button 
+                type="submit"
+                disabled={createCourseMutation.isPending}
+              >
+                {createCourseMutation.isPending ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    Creating...
+                  </>
+                ) : (
+                  'Launch Course Prototype'
+                )}
+              </Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
 
       {/* Stats */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
@@ -96,12 +292,20 @@ export default function AdminCoursesPage() {
                   <div className="w-12 h-12 rounded-xl bg-[var(--brand-500)]/10 flex items-center justify-center">
                     <BookOpen className="w-6 h-6 text-[var(--brand-500)]" />
                   </div>
-                  <div className="flex items-center gap-2">
-                    {course.published ? (
-                      <Eye className="w-4 h-4 text-emerald-500" />
-                    ) : (
-                      <EyeOff className="w-4 h-4 text-[var(--text-muted)]" />
-                    )}
+                   <div className="flex items-center gap-2">
+                    <button 
+                      className={`p-2 rounded-lg transition-colors ${course.published ? 'text-emerald-500 hover:bg-emerald-500/10' : 'text-[var(--text-muted)] hover:bg-[var(--bg-tertiary)]'}`}
+                      onClick={() => togglePublishMutation.mutate(course.id)}
+                      title={course.published ? "Unpublish" : "Publish"}
+                    >
+                      {course.published ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
+                    </button>
+                    <button 
+                      className="p-2 rounded-lg hover:bg-red-500/10 text-red-500 transition-colors"
+                      onClick={() => confirm(`Permanently delete ${course.title}?`) && deleteCourseMutation.mutate(course.id)}
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
                   </div>
                 </div>
                 <h3 className="text-lg font-bold text-[var(--text-primary)] group-hover:text-[var(--brand-400)] transition-colors line-clamp-1 mb-2">

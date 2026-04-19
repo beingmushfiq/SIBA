@@ -79,7 +79,9 @@ class CourseController extends Controller
             'level' => $validated['level'] ?? 'BEGINNER',
             'price' => $validated['price'] ?? 0,
             'category_id' => $validated['category_id'] ?? null,
-            'trainer_id' => $request->user()->id,
+            'trainer_id' => ($request->user()->role === 'ADMIN' && $request->has('trainer_id')) 
+                ? $request->trainer_id 
+                : $request->user()->id,
         ]);
 
         return response()->json(['success' => true, 'course' => $course], 201);
@@ -149,6 +151,61 @@ class CourseController extends Controller
         return response()->json(['success' => true, 'module' => $module], 201);
     }
 
+    public function updateModule(Request $request, Module $module)
+    {
+        $validated = $request->validate([
+            'title' => 'string|max:255',
+            'description' => 'nullable|string',
+            'type' => 'string|in:ORIENTATION,CORE,PRACTICAL,EVALUATION,CERTIFICATION',
+        ]);
+
+        $module->update($validated);
+        return response()->json(['success' => true, 'module' => $module]);
+    }
+
+    public function deleteModule(Module $module)
+    {
+        $module->delete();
+        return response()->json(['success' => true]);
+    }
+
+    public function reorderModules(Request $request, Course $course)
+    {
+        $request->validate(['module_ids' => 'required|array']);
+        foreach ($request->module_ids as $index => $id) {
+            Module::where('id', $id)->update(['order' => $index + 1]);
+        }
+        return response()->json(['success' => true]);
+    }
+
+    public function updateLesson(Request $request, Lesson $lesson)
+    {
+        $validated = $request->validate([
+            'title' => 'string|max:255',
+            'content' => 'string',
+            'video_url' => 'nullable|string',
+            'duration' => 'nullable|integer',
+        ]);
+
+        $lesson->update($validated);
+        return response()->json(['success' => true, 'lesson' => $lesson]);
+    }
+
+    public function deleteLesson(Lesson $lesson)
+    {
+        $lesson->delete();
+        return response()->json(['success' => true]);
+    }
+
+    public function reorderLessons(Request $request, Module $module)
+    {
+        $request->validate(['lesson_ids' => 'required|array']);
+        foreach ($request->lesson_ids as $index => $id) {
+            Lesson::where('id', $id)->update(['order' => $index + 1]);
+        }
+        return response()->json(['success' => true]);
+    }
+
     /**
      * POST /api/modules/{module}/lessons
      * Replaces: actions/courses.ts → createLesson()
@@ -193,5 +250,49 @@ class CourseController extends Controller
         ]);
 
         return response()->json(['success' => true, 'category' => $category], 201);
+    }
+    /**
+     * QUIZ MANAGEMENT
+     */
+    public function storeQuiz(Request $request, Module $module)
+    {
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'questions' => 'required|array',
+            'passing_score' => 'integer|min:0|max:100',
+            'time_limit' => 'integer|min:0', // in minutes
+        ]);
+
+        $quiz = \App\Models\Quiz::create([
+            'title' => $validated['title'],
+            'description' => $validated['description'] ?? null,
+            'questions' => $validated['questions'],
+            'passing_score' => $validated['passing_score'] ?? 80,
+            'time_limit' => $validated['time_limit'] ?? 0,
+            'module_id' => $module->id,
+        ]);
+
+        return response()->json(['success' => true, 'quiz' => $quiz], 201);
+    }
+
+    public function updateQuiz(Request $request, \App\Models\Quiz $quiz)
+    {
+        $validated = $request->validate([
+            'title' => 'string|max:255',
+            'description' => 'nullable|string',
+            'questions' => 'array',
+            'passing_score' => 'integer|min:0|max:100',
+            'time_limit' => 'integer|min:0',
+        ]);
+
+        $quiz->update($validated);
+        return response()->json(['success' => true, 'quiz' => $quiz]);
+    }
+
+    public function deleteQuiz(\App\Models\Quiz $quiz)
+    {
+        $quiz->delete();
+        return response()->json(['success' => true]);
     }
 }
