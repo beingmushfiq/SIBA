@@ -53,7 +53,7 @@ export default function StudentDashboard() {
               <WifiOff className="w-5 h-5 text-amber-500" />
               <div>
                  <p className="font-bold text-amber-900">Synchronous Link Offline</p>
-                 <p className="text-sm text-amber-700">You are currently in local storage mode. Access your downloaded modules below.</p>
+                 <p className="text-sm text-amber-700">You are currently in local storage mode. Connect to sync your progress.</p>
               </div>
            </div>
            <Badge variant="outline" className="border-amber-500 text-amber-600 animate-pulse">OFFLINE MODE</Badge>
@@ -63,11 +63,11 @@ export default function StudentDashboard() {
       {/* Hero Section */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
          <div>
-            <h1 className="text-4xl font-black text-[var(--text-primary)] tracking-tighter uppercase italic">Neural Command Center</h1>
-            <p className="text-[var(--text-secondary)] font-medium mt-1">Status: Operational • Linked to SIBA Mainframe</p>
+            <h1 className="text-4xl font-black text-[var(--text-primary)] tracking-tighter uppercase italic">Control Center</h1>
+            <p className="text-[var(--text-secondary)] font-medium mt-1">Status: Operational • Connected to SIBA Grid</p>
          </div>
          <div className="flex items-center gap-2 text-[var(--text-muted)] text-sm font-black uppercase tracking-widest">
-            {isOnline ? <><Wifi className="w-4 h-4 text-emerald-500" /> Latency: 42ms</> : <><WifiOff className="w-4 h-4 text-red-500 text-pulse" /> Local Storage Active</>}
+            {isOnline ? <><Wifi className="w-4 h-4 text-[var(--brand-500)]" /> Network Latency Optimizing...</> : <><WifiOff className="w-4 h-4 text-red-500" /> Local Link</>}
          </div>
       </div>
 
@@ -111,7 +111,7 @@ export default function StudentDashboard() {
           <div className="flex items-center justify-between">
             <h2 className="text-2xl font-black text-[var(--text-primary)] uppercase tracking-tighter">Current Learning Stacks</h2>
             <Link to="/courses">
-              <Button variant="outline" size="sm" className="rounded-xl font-bold">Search Mainframe</Button>
+              <Button variant="outline" size="sm" className="rounded-xl font-bold">Explore Grid</Button>
             </Link>
           </div>
 
@@ -119,7 +119,7 @@ export default function StudentDashboard() {
             <div className="text-center py-20 bg-[var(--bg-secondary)] rounded-3xl border-2 border-dashed border-[var(--border-secondary)]">
               <PlayCircle className="w-16 h-16 mx-auto text-[var(--text-muted)] mb-4 opacity-30" />
               <h3 className="text-xl font-bold text-[var(--text-primary)]">Buffer Empty</h3>
-              <p className="text-[var(--text-secondary)] mb-6 text-sm">No knowledge streams found. Initialize a new link.</p>
+              <p className="text-[var(--text-secondary)] mb-6 text-sm">No knowledge streams found. Initialize a new link from the catalog.</p>
               <Link to="/courses">
                 <Button className="rounded-2xl px-10 h-12 bg-[var(--brand-500)] text-white font-black">START LINKING</Button>
               </Link>
@@ -150,7 +150,7 @@ export default function StudentDashboard() {
 
                        <div className="flex items-center justify-between gap-4">
                           <p className="text-xs font-bold text-[var(--text-muted)] flex items-center gap-1.5 uppercase">
-                             <Clock className="w-3 h-3" /> Last Active: {enr.status === 'COMPLETED' ? 'Finalized' : 'In Progress'}
+                             <Clock className="w-3 h-3" /> Status: {enr.status === 'COMPLETED' ? 'Finalized' : 'In Progress'}
                           </p>
                           <Link to={`/dashboard/student/learn/${enr.course.slug}`}>
                             <Button className="rounded-2xl gap-2 font-black italic bg-white text-black hover:bg-gray-100 uppercase tracking-tighter">
@@ -166,50 +166,43 @@ export default function StudentDashboard() {
           )}
         </div>
 
-        {/* Sidebar: Offline & Downloads */}
+        {/* Sidebar: System Info */}
         <div className="space-y-8">
            <div className="flex items-center justify-between">
-              <h2 className="text-xl font-black text-[var(--text-primary)] uppercase tracking-tighter">Local Vault</h2>
-              <Download className="w-4 h-4 text-[var(--text-muted)]" />
+              <h2 className="text-xl font-black text-[var(--text-primary)] uppercase tracking-tighter">System Pulse</h2>
+              <Zap className="w-4 h-4 text-[var(--brand-500)]" />
            </div>
 
            <Card className="border-[var(--border-secondary)] bg-[var(--bg-primary)]/50 backdrop-blur-xl rounded-3xl overflow-hidden">
               <CardHeader className="border-b border-[var(--border-secondary)] p-6 bg-[var(--bg-secondary)]/50">
-                 <CardTitle className="text-xs font-black uppercase tracking-[0.2em] text-[var(--text-muted)]">Offline Cache</CardTitle>
+                 <CardTitle className="text-xs font-black uppercase tracking-[0.2em] text-[var(--text-muted)]">Live Terminal</CardTitle>
               </CardHeader>
-              <CardContent className="p-0">
-                 <div className="divide-y divide-[var(--border-secondary)]">
-                    {offlineResources.map(res => (
-                       <div key={res.id} className="p-4 flex items-center justify-between hover:bg-[var(--bg-secondary)]/30 transition-colors">
-                          <div className="flex items-center gap-3">
-                             <div className={`p-2 rounded-xl ${res.downloaded ? 'bg-emerald-500/10 text-emerald-500' : 'bg-[var(--bg-tertiary)] text-[var(--text-muted)]'}`}>
-                                {res.type === 'VIDEO' ? <PlayCircle className="w-4 h-4" /> : <FileText className="w-4 h-4" />}
-                             </div>
-                             <div>
-                                <p className="text-xs font-bold text-[var(--text-primary)] line-clamp-1">{res.title}</p>
-                                <p className="text-[9px] font-black tracking-widest text-[var(--text-muted)] uppercase">{res.size} • {res.type}</p>
-                             </div>
-                          </div>
-                          {res.downloaded ? (
-                             <Badge variant="outline" className="text-[8px] border-emerald-500/30 text-emerald-600 bg-emerald-500/5 px-1.5 h-5 font-black uppercase">Stored</Badge>
-                          ) : (
-                             <Button variant="ghost" size="icon" className="h-8 w-8 text-[var(--brand-500)]"><Download className="w-4 h-4" /></Button>
-                          )}
-                       </div>
-                    ))}
+              <CardContent className="p-6">
+                 <div className="space-y-4">
+                    <div className="flex items-center gap-3">
+                       <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                       <span className="text-[10px] font-black text-[var(--text-secondary)] uppercase tracking-[0.2em]">Auth Synchronized</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                       <div className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse" />
+                       <span className="text-[10px] font-black text-[var(--text-secondary)] uppercase tracking-[0.2em]">Neural Link Stable</span>
+                    </div>
                  </div>
-                 <div className="p-4 bg-[var(--bg-secondary)]/50 border-t border-[var(--border-secondary)]">
-                    <p className="text-[10px] text-[var(--text-muted)] italic font-medium leading-tight">Downloads are stored in your browser's IndexedDB for encrypted local access.</p>
+                 <div className="mt-8 pt-8 border-t border-[var(--border-secondary)]">
+                    <p className="text-[10px] text-[var(--text-muted)] italic leading-relaxed">System monitoring in real-time. All progress is cryptographically secured on the SIBA grid.</p>
                  </div>
               </CardContent>
            </Card>
 
-           {/* AI Agent Recommendation */}
+           {/* AI Agent Recommendation (Placeholder) */}
            <div className="p-6 rounded-3xl bg-gradient-to-br from-[var(--brand-500)] to-[var(--brand-600)] text-white shadow-2xl shadow-[var(--brand-500)]/20 relative overflow-hidden group">
               <div className="absolute -right-10 -bottom-10 w-40 h-40 bg-white/10 rounded-full blur-3xl group-hover:scale-110 transition-transform" />
               <h4 className="text-lg font-black uppercase tracking-tighter italic mb-2">SIBA Intelligence</h4>
-              <p className="text-xs font-medium text-white/80 leading-relaxed mb-4">Based on your activity, I recommend linking to "Advanced Neural Routing" next.</p>
-              <Button variant="outline" className="w-full border-white/20 hover:bg-white/10 text-white rounded-xl font-bold uppercase tracking-widest text-[10px]">Optimize Path</Button>
+              <p className="text-xs font-medium text-white/80 leading-relaxed mb-4">
+                {enrollments.length > 0 
+                  ? "Based on your execution patterns, I'll optimize your curriculum path."
+                  : "Awaiting activity to initialize your personalized learning path recommendation."}
+              </p>
            </div>
         </div>
       </div>

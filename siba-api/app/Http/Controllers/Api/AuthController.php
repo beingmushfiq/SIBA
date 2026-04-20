@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
@@ -85,6 +86,50 @@ class AuthController extends Controller
      */
     public function user(Request $request)
     {
-        return response()->json($request->user());
+        $user = $request->user();
+        if ($user->avatar) {
+            $user->avatar_url = url(Storage::url($user->avatar));
+        } else {
+            $user->avatar_url = "https://api.dicebear.com/7.x/avataaars/svg?seed=" . $user->name;
+        }
+        return response()->json($user);
+    }
+
+    public function updateProfile(Request $request)
+    {
+        $user = $request->user();
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'bio' => 'nullable|string',
+            'phone' => 'nullable|string',
+            'skills' => 'nullable|array',
+            'level' => 'nullable|string|in:BEGINNER,INTERMEDIATE,ADVANCED,EXPERT',
+        ]);
+
+        $user->update($validated);
+
+        return response()->json(['success' => true, 'user' => $user]);
+    }
+
+    public function updateAvatar(Request $request)
+    {
+        $request->validate([
+            'avatar' => 'required|image|max:2048',
+        ]);
+
+        $user = $request->user();
+
+        if ($user->avatar) {
+            Storage::disk('public')->delete($user->avatar);
+        }
+
+        $path = $request->file('avatar')->store('avatars', 'public');
+        $user->avatar = $path;
+        $user->save();
+
+        return response()->json([
+            'success' => true,
+            'avatar_url' => url(Storage::url($path))
+        ]);
     }
 }

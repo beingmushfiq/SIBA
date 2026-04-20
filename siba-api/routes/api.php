@@ -14,11 +14,14 @@ Route::get('/courses', [CourseController::class, 'index']);
 Route::get('/courses/{slug}', [CourseController::class, 'show']);
 Route::get('/mentors', [\App\Http\Controllers\Api\MentorController::class, 'index']);
 Route::get('/certificate/verify/{certificate_no}', [\App\Http\Controllers\Api\CertificateController::class, 'verify']);
+Route::get('/settings', [\App\Http\Controllers\Api\SettingController::class, 'index']);
 
 // ─── AUTHENTICATED ROUTES ───────────────────────────────────────
 Route::middleware('auth:api')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/user', [AuthController::class, 'user']);
+    Route::post('/user/profile', [AuthController::class, 'updateProfile']);
+    Route::post('/user/avatar', [AuthController::class, 'updateAvatar']);
 
     // Notifications API
     Route::get('/notifications', [\App\Http\Controllers\Api\NotificationController::class, 'index']);
@@ -48,6 +51,7 @@ Route::middleware('auth:api')->group(function () {
     // Admin API
     Route::middleware('role:ADMIN')->prefix('admin')->group(function () {
         Route::get('/stats', [\App\Http\Controllers\Api\AdminController::class, 'stats']);
+        Route::get('/analytics', [\App\Http\Controllers\Api\AdminController::class, 'analytics']);
         Route::get('/users', [\App\Http\Controllers\Api\AdminController::class, 'users']);
         Route::post('/users', [\App\Http\Controllers\Api\AdminController::class, 'storeUser']);
         Route::put('/users/{id}', [\App\Http\Controllers\Api\AdminController::class, 'updateUser']);
@@ -57,6 +61,11 @@ Route::middleware('auth:api')->group(function () {
         Route::delete('/users/{id}', [\App\Http\Controllers\Api\AdminController::class, 'deleteUser']);
         Route::get('/revenue', [\App\Http\Controllers\Api\AdminController::class, 'revenue']);
         Route::get('/revenue/export', [\App\Http\Controllers\Api\AdminController::class, 'exportRevenue']);
+        Route::get('/enrollments', [\App\Http\Controllers\Api\AdminController::class, 'getEnrollments']);
+        
+        // Settings
+        Route::post('/settings', [\App\Http\Controllers\Api\SettingController::class, 'update']);
+        Route::post('/settings/logo', [\App\Http\Controllers\Api\SettingController::class, 'uploadLogo']);
 
         // Admin Certificate Control
         Route::post('/certificates', [\App\Http\Controllers\Api\CertificateController::class, 'store']);

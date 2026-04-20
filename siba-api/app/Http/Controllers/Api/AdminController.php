@@ -76,7 +76,7 @@ class AdminController extends Controller
         });
 
         // Top Performers based on progress/score
-        $topPerformers = Enrollment::with('user:id,name')
+        $topPerformers = Enrollment::with(['user:id,name', 'course:id,title'])
             ->orderBy('progress', 'desc')
             ->take(5)
             ->get()
@@ -107,7 +107,7 @@ class AdminController extends Controller
             'stats' => [
                 'activeUsers' => $activeUsers,
                 'completionRate' => $completionRate,
-                'avgSession' => '42m', 
+                'avgSession' => '0m',
                 'certificatesIssued' => $totalCertificates
             ],
             'courseCompletionData' => $courseCompletionData,
@@ -273,5 +273,28 @@ class AdminController extends Controller
         if (auth()->id() === $user->id) return response()->json(['error' => 'Self-deletion denied.'], 400);
         $user->delete();
         return response()->json(['success' => true]);
+    }
+
+    /**
+     * Get all enrollments for Admin
+     */
+    public function getEnrollments()
+    {
+        $enrollments = Enrollment::with(['user:id,name', 'course:id,title'])
+            ->latest()
+            ->paginate(50);
+
+        return response()->json([
+            'enrollments' => $enrollments->map(function($en) {
+                return [
+                    'id' => $en->id,
+                    'student' => $en->user->name ?? 'Unknown',
+                    'course' => $en->course->title ?? 'Deleted Course',
+                    'status' => $en->status,
+                    'progress' => $en->progress,
+                    'enrolled' => $en->created_at->format('Y-m-d')
+                ];
+            })
+        ]);
     }
 }

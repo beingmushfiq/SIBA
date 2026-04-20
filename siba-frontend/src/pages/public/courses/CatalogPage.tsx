@@ -117,8 +117,8 @@ export default function CatalogPage() {
                       <span className="flex items-center gap-1">
                         <Layers className="w-3.5 h-3.5" /> {course.modules_count} modules
                       </span>
-                      <span className="ml-auto font-semibold text-sm text-[var(--text-primary)]">
-                        {course.price > 0 ? formatCurrency(course.price) : "Free"}
+                      <span className="ml-auto font-black text-[10px] text-[var(--brand-500)] uppercase tracking-widest">
+                        Elite Access
                       </span>
                     </div>
 

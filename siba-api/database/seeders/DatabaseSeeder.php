@@ -23,7 +23,7 @@ class DatabaseSeeder extends Seeder
         // ─── USERS ──────────────────────────────────────────────
         $admin = User::create([
             'id' => $this->cuid(),
-            'name' => 'Md. Ismail Hossain Sherazi',
+            'name' => 'Admin',
             'email' => 'admin@siba.academy',
             'password' => 'password',
             'role' => 'ADMIN',
@@ -32,11 +32,11 @@ class DatabaseSeeder extends Seeder
 
         $trainer = User::create([
             'id' => $this->cuid(),
-            'name' => 'Modern Business Development Architects',
-            'email' => 'ismail@siba.academy',
+            'name' => 'Architects',
+            'email' => 'architects@siba.academy',
             'password' => 'password',
             'role' => 'TRAINER',
-            'bio' => 'Founder and Owner, SIBA Academy. Architecting radical transformations in business through automation.',
+            'bio' => 'Architecting radical transformations in business through automation.',
             'level' => 'EXPERT',
         ]);
 

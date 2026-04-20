@@ -59,40 +59,15 @@ const features = [
 ];
 
 const flowSteps = [
-  { step: "01", title: "Orientation", desc: "Mindset & direction setting", icon: Target },
-  { step: "02", title: "Core Learning", desc: "Concept mastery", icon: BookOpen },
-  { step: "03", title: "Practical", desc: "Hands-on execution", icon: Zap },
-  { step: "04", title: "Evaluation", desc: "Skill assessment", icon: BarChart3 },
-  { step: "05", title: "Certification", desc: "Validated credentials", icon: Award },
-  { step: "06", title: "Business", desc: "Launch & scale", icon: Rocket },
+  { step: "01", title: "Orientation", desc: "Mindset & direction setting", icon: Target, color: "from-blue-600 to-indigo-700" },
+  { step: "02", title: "Core Learning", desc: "Concept mastery", icon: BookOpen, color: "from-indigo-700 to-purple-700" },
+  { step: "03", title: "Practical", desc: "Hands-on execution", icon: Zap, color: "from-purple-700 to-pink-700" },
+  { step: "04", title: "Evaluation", desc: "Skill assessment", icon: BarChart3, color: "from-pink-700 to-rose-700" },
+  { step: "05", title: "Certification", desc: "Validated credentials", icon: Award, color: "from-rose-700 to-orange-700" },
+  { step: "06", title: "Business", desc: "Launch & scale", icon: Rocket, color: "from-orange-700 to-emerald-700" },
 ];
 
-const mentorsList = [
-  {
-    name: "Nobin Bonik",
-    role: "Architectural Lead",
-    image: "/images/mentors/nobin.jpg",
-    bio: "The strategist behind the 'soul' of SIBA brands. Architecting growth with surgical precision.",
-  },
-  {
-    name: "Shahanewas Shawon",
-    role: "Chief Technical Architect",
-    image: "/images/mentors/shahanewas.jpg",
-    bio: "Designing high-performance digital foundations and seamless automated workflows.",
-  },
-  {
-    name: "Rasel Ahmed",
-    role: "Financial & Data Scientist",
-    image: "/images/mentors/rasel.jpg",
-    bio: "Transforming raw data into strategic economic power and financial realism.",
-  },
-  {
-    name: "Rumel Ahmmed",
-    role: "Business Dev Lead",
-    image: "/images/mentors/rumel.jpg",
-    bio: "Sustainable revenue through deep analysis and elite retention frameworks.",
-  },
-];
+
 
 export default function HomePage() {
   const { isAuthenticated, user, isLoading } = useAuthStore();
@@ -105,7 +80,16 @@ export default function HomePage() {
     }
   });
 
+  const { data: mentorsData } = useQuery({
+    queryKey: ['public-mentors'],
+    queryFn: async () => {
+      const response = await api.get('/api/mentors');
+      return response.data;
+    }
+  });
+
   const featuredCourses = catalogData?.courses?.slice(0, 3) || [];
+  const mentorsList = mentorsData || [];
 
   if (isLoading) {
     return <div className="min-h-[100dvh] flex items-center justify-center bg-[var(--bg-primary)]">
@@ -113,10 +97,6 @@ export default function HomePage() {
     </div>;
   }
 
-  // Redirect to dashboard if logged in
-  if (isAuthenticated && user) {
-     return <Navigate to={`/dashboard/${user.role.toLowerCase()}`} replace />;
-  }
 
   return (
     <div className="min-h-[100dvh] w-full max-w-[100vw] overflow-x-hidden bg-[var(--bg-primary)] selection:bg-[var(--brand-500)] selection:text-white">
@@ -252,13 +232,14 @@ export default function HomePage() {
               const Icon = step.icon;
               return (
                 <div key={step.step} className="relative group" style={{ animationDelay: `${i * 100}ms` }}>
-                  <div className="glass-card p-6 text-center h-full hover:bg-[var(--bg-card-hover)] transition-colors border-white/5">
-                    <div className="text-[10px] font-black text-[var(--brand-400)] mb-5 opacity-40 group-hover:opacity-100 transition-opacity tracking-widest">{step.step}</div>
-                    <div className="w-12 h-12 rounded-2xl bg-[var(--brand-600)]/10 border border-[var(--brand-600)]/15 flex items-center justify-center mx-auto mb-5 transition-transform group-hover:scale-110">
-                      <Icon className="w-5 h-5 text-[var(--brand-500)]" />
+                  <div className="glass-card p-6 text-center h-full hover:border-transparent transition-all border-white/5 relative overflow-hidden group/item">
+                    <div className={`absolute inset-0 bg-gradient-to-br ${step.color} opacity-0 group-hover/item:opacity-[0.05] transition-opacity`} />
+                    <div className="text-[10px] font-black text-[var(--brand-400)] mb-5 opacity-40 group-hover:opacity-100 transition-opacity tracking-widest relative z-10">{step.step}</div>
+                    <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${step.color} shadow-lg shadow-indigo-500/20 flex items-center justify-center mx-auto mb-5 transition-transform group-hover:scale-110 relative z-10`}>
+                      <Icon className="w-5 h-5 text-white" />
                     </div>
-                    <h3 className="text-xs font-black text-[var(--text-primary)] mb-2 uppercase tracking-tighter leading-tight whitespace-nowrap">{step.title}</h3>
-                    <p className="text-[10px] text-[var(--text-muted)] font-medium leading-relaxed">{step.desc}</p>
+                    <h3 className="text-xs font-black text-[var(--text-primary)] mb-2 uppercase tracking-tighter leading-tight whitespace-nowrap relative z-10">{step.title}</h3>
+                    <p className="text-[10px] text-[var(--text-muted)] font-medium leading-relaxed relative z-10">{step.desc}</p>
                   </div>
                 </div>
               );
@@ -360,9 +341,9 @@ export default function HomePage() {
                       </div>
                     </div>
                     <div className="text-right">
-                      <p className="text-[var(--text-muted)] uppercase tracking-tighter text-[7px] font-black">Investment</p>
-                      <p className="text-xl font-black text-[var(--text-primary)] tracking-tight">
-                        {course.price > 0 ? formatCurrency(course.price) : "Free"}
+                      <p className="text-[var(--text-muted)] uppercase tracking-tighter text-[7px] font-black">Status</p>
+                      <p className="text-sm font-black text-[var(--brand-500)] uppercase tracking-tight">
+                        Open
                       </p>
                     </div>
                   </div>

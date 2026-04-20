@@ -2,6 +2,8 @@ import { useEffect, lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { useAuthStore } from '@/store/useAuthStore';
 import { LoadingOverlay } from './components/layout/LoadingOverlay';
+import toast from 'react-hot-toast';
+
 
 // ─── Layouts ────────────────────────────────────────────────
 const PublicLayout = lazy(() => import('./layouts/PublicLayout'));
@@ -47,6 +49,7 @@ const EnrollmentsPage = lazy(() => import('./pages/protected/admin/EnrollmentsPa
 const RevenuePage = lazy(() => import('./pages/protected/admin/RevenuePage'));
 const AdminAnalyticsPage = lazy(() => import('./pages/protected/admin/AnalyticsPage'));
 const SettingsPage = lazy(() => import('./pages/protected/admin/SettingsPage'));
+const ProfilePage = lazy(() => import('./pages/protected/shared/ProfilePage'));
 
 // ─── Mentor Pages ───────────────────────────────────────────
 const MentorDashboard = lazy(() => import('./pages/protected/mentor/MentorDashboard'));
@@ -59,6 +62,7 @@ export default function App() {
 
   useEffect(() => {
     checkAuth();
+    toast.success('SIBA Platform Initialized');
   }, [checkAuth]);
 
   return (
@@ -129,6 +133,12 @@ export default function App() {
             <Route path="revenue" element={<RevenuePage />} />
             <Route path="analytics" element={<AdminAnalyticsPage />} />
             <Route path="settings" element={<SettingsPage />} />
+          </Route>
+        </Route>
+        {/* ── SHARED AUTH ROUTES ───────────────────────────── */}
+        <Route element={<ProtectedRoute allowedRoles={['STUDENT', 'TRAINER', 'MENTOR', 'ADMIN']} />}>
+          <Route element={<DashboardLayout />}>
+            <Route path="/dashboard/profile" element={<ProfilePage />} />
           </Route>
         </Route>
       </Routes>

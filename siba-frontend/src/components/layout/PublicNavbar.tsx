@@ -1,12 +1,14 @@
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme-toggle";
-import { Menu, X, ArrowRight, Home, Zap, BookOpen, Users, Info, GraduationCap, ShieldCheck } from "lucide-react";
+import { Menu, X, ArrowRight, Home, Zap, BookOpen, Users, Info, GraduationCap, ShieldCheck, LayoutDashboard } from "lucide-react";
 import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { Logo } from "@/components/ui/logo";
+import { useAuthStore } from "@/store/useAuthStore";
 
 export function PublicNavbar() {
+  const { isAuthenticated, user } = useAuthStore();
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
@@ -146,15 +148,26 @@ export function PublicNavbar() {
           <ThemeToggle />
           
           <div className="flex items-center gap-3">
-            <Link to="/login">
-              <Button variant="ghost" className="font-bold text-[10px] uppercase tracking-widest text-[var(--text-secondary)] hover:text-[var(--text-primary)]">Sign In</Button>
-            </Link>
-            <Link to="/register">
-              <Button size="sm" className="rounded-xl px-5 font-black text-[10px] uppercase tracking-widest bg-[var(--brand-600)] hover:bg-[var(--brand-700)] text-white shadow-lg transition-all hover:scale-105 active:scale-95 group">
-                Join Academy
-                <ArrowRight className="w-3.5 h-3.5 ml-1.5 transition-transform group-hover:translate-x-0.5" />
-              </Button>
-            </Link>
+            {isAuthenticated && user ? (
+              <Link to={`/dashboard/${user.role.toLowerCase()}`}>
+                <Button size="sm" className="rounded-xl px-5 font-black text-[10px] uppercase tracking-widest bg-[var(--brand-600)] hover:bg-[var(--brand-700)] text-white shadow-lg transition-all hover:scale-105 active:scale-95 group">
+                   Go to Dashboard
+                  <LayoutDashboard className="w-3.5 h-3.5 ml-1.5 transition-transform group-hover:rotate-12" />
+                </Button>
+              </Link>
+            ) : (
+              <>
+                <Link to="/login">
+                  <Button variant="ghost" className="font-bold text-[10px] uppercase tracking-widest text-[var(--text-secondary)] hover:text-[var(--text-primary)]">Sign In</Button>
+                </Link>
+                <Link to="/register">
+                  <Button size="sm" className="rounded-xl px-5 font-black text-[10px] uppercase tracking-widest bg-[var(--brand-600)] hover:bg-[var(--brand-700)] text-white shadow-lg transition-all hover:scale-105 active:scale-95 group">
+                    Join Academy
+                    <ArrowRight className="w-3.5 h-3.5 ml-1.5 transition-transform group-hover:translate-x-0.5" />
+                  </Button>
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </nav>
@@ -183,12 +196,22 @@ export function PublicNavbar() {
           ))}
           <div className="w-24 h-px bg-[var(--border-primary)] my-4 sm:my-6" />
           <div className="flex flex-col w-full max-w-xs gap-4">
-            <Link to="/login" className="w-full" onClick={() => setIsOpen(false)}>
-              <Button variant="outline" size="lg" className="w-full rounded-2xl font-bold uppercase text-xs tracking-widest border-2 min-h-[48px]">Sign In</Button>
-            </Link>
-            <Link to="/register" className="w-full" onClick={() => setIsOpen(false)}>
-              <Button size="lg" className="w-full rounded-2xl font-black bg-[var(--brand-600)] text-white uppercase text-xs tracking-widest shadow-xl min-h-[48px]">Join the Academy</Button>
-            </Link>
+            {isAuthenticated && user ? (
+               <Link to={`/dashboard/${user.role.toLowerCase()}`} className="w-full" onClick={() => setIsOpen(false)}>
+                <Button size="lg" className="w-full rounded-2xl font-black bg-[var(--brand-600)] text-white uppercase text-xs tracking-widest shadow-xl min-h-[48px]">
+                  Return to Dashboard
+                </Button>
+              </Link>
+            ) : (
+              <>
+                <Link to="/login" className="w-full" onClick={() => setIsOpen(false)}>
+                  <Button variant="outline" size="lg" className="w-full rounded-2xl font-bold uppercase text-xs tracking-widest border-2 min-h-[48px]">Sign In</Button>
+                </Link>
+                <Link to="/register" className="w-full" onClick={() => setIsOpen(false)}>
+                  <Button size="lg" className="w-full rounded-2xl font-black bg-[var(--brand-600)] text-white uppercase text-xs tracking-widest shadow-xl min-h-[48px]">Join the Academy</Button>
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </div>

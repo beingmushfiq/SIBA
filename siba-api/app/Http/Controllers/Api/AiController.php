@@ -32,7 +32,7 @@ class AiController extends Controller
             'user_id' => $request->user()->id,
             'feature' => 'Business Plan Advice',
             'model' => 'gemini-1.5-flash',
-            'tokens_used' => rand(500, 1500),
+            'tokens_used' => 0, // Reset mock tokens usage
             'prompt_summary' => "Advice request for plan: " . ($plan->title ?? 'Untitled'),
         ]);
 

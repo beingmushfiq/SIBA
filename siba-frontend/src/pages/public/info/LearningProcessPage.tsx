@@ -84,25 +84,41 @@ export default function LearningProcessPage() {
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {step.details.map((detail, dIdx) => (
-                    <div key={dIdx} className="flex items-center gap-4 p-4 rounded-3xl bg-[var(--bg-secondary)]/[0.4] border border-[var(--border-primary)] group/item hover:border-[var(--brand-500)]/30 transition-all">
-                      <div className="w-8 h-8 rounded-xl bg-[var(--bg-tertiary)] flex items-center justify-center text-[var(--brand-500)] group-hover/item:scale-110 transition-transform">
+                    <div key={dIdx} className={`flex items-center gap-4 p-4 rounded-3xl bg-[var(--bg-secondary)]/[0.4] border border-[var(--border-primary)] group/item hover:border-transparent transition-all relative overflow-hidden`}>
+                      <div className={`absolute inset-0 bg-gradient-to-br ${step.color} opacity-0 group-hover/item:opacity-5 transition-opacity`} />
+                      <div className={`w-8 h-8 rounded-xl bg-[var(--bg-tertiary)] flex items-center justify-center group-hover/item:scale-110 transition-transform relative z-10`}>
                         <ChevronRight className="w-4 h-4" />
                       </div>
-                      <span className="text-[11px] font-black text-[var(--text-primary)] uppercase tracking-wider">{detail}</span>
+                      <span className="text-[11px] font-black text-[var(--text-primary)] uppercase tracking-wider relative z-10">{detail}</span>
                     </div>
                   ))}
                 </div>
               </div>
 
               <div className="flex-1 w-full relative">
-                <div className={`absolute inset-0 bg-gradient-to-br ${step.color} opacity-[0.03] blur-[100px] rounded-full`} />
-                <div className="relative aspect-video rounded-2xl sm:rounded-[3rem] bg-[var(--bg-secondary)] border border-[var(--border-primary)] shadow-2xl flex items-center justify-center overflow-hidden group/box">
-                  <div className="absolute inset-0 mesh-bg opacity-10" />
-                  <div className={`absolute inset-0 bg-gradient-to-br ${step.color} opacity-0 group-hover/box:opacity-10 transition-opacity duration-[var(--duration-slow)]`} />
-                  <div className="text-[20rem] font-black text-white/[0.03] select-none tracking-tighter group-hover/box:scale-110 transition-transform duration-[var(--duration-slow)]">
+                {/* Atmospheric Glow */}
+                <div className={`absolute inset-0 bg-gradient-to-br ${step.color} opacity-[0.1] blur-[80px] rounded-full scale-110`} />
+                
+                <div className="relative aspect-video rounded-2xl sm:rounded-[3rem] border border-white/10 shadow-2xl flex items-center justify-center overflow-hidden group/box transition-all duration-700 hover:scale-[1.02]">
+                  {/* Base Gradient Background */}
+                  <div className={`absolute inset-0 bg-gradient-to-br ${step.color} opacity-[0.6] group-hover/box:opacity-[0.8] transition-opacity duration-700`} />
+                  
+                  {/* Decorative mesh and patterns */}
+                  <div className="absolute inset-0 mesh-bg opacity-20" />
+                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,black_100%)] opacity-30" />
+                  
+                  {/* Phase Number Backdrop */}
+                  <div className="text-[16rem] sm:text-[22rem] font-black text-white/10 select-none tracking-tighter group-hover/box:scale-110 transition-transform duration-[var(--duration-slow)] leading-none">
                     {index + 1}
                   </div>
-                  <step.icon className="absolute w-32 h-32 text-[var(--text-primary)] opacity-5 group-hover/box:opacity-20 group-hover/box:scale-125 transition-all duration-[var(--duration-slow)]" />
+                  
+                  {/* Floating Icon */}
+                  <div className="absolute w-24 h-24 sm:w-32 sm:h-32 bg-white/10 backdrop-blur-xl rounded-[2rem] border border-white/20 flex items-center justify-center transform group-hover/box:rotate-[-6deg] group-hover/box:scale-110 transition-all duration-700 shadow-2xl">
+                    <step.icon className="w-12 h-12 sm:w-16 sm:h-16 text-white group-hover/box:scale-110 transition-transform" />
+                  </div>
+
+                  {/* Refined Shine Effect */}
+                  <div className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/10 to-white/0 translate-x-[-100%] group-hover/box:translate-x-[100%] transition-transform duration-[1.5s] ease-in-out" />
                 </div>
               </div>
             </section>

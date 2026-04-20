@@ -4,21 +4,53 @@ import { Button } from '@/components/ui/button';
 import { StatCard } from '@/components/dashboard/stat-card';
 import { ClipboardList, Upload, FileText } from 'lucide-react';
 
+import { useQuery } from '@tanstack/react-query';
+import api from '@/lib/axios';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { StatCard } from '@/components/dashboard/stat-card';
+import { ClipboardList, Upload, FileText, Loader2, PlayCircle } from 'lucide-react';
+import { Link } from 'react-router-dom';
+
 export default function AssignmentsPage() {
-  const assignments = [
-    { id: 1, title: 'Build a REST API with Express', course: 'Full-Stack Web Dev', module: 'Backend Fundamentals', dueDate: '2026-04-20', status: 'pending', type: 'project' },
-    { id: 2, title: 'React Component Architecture', course: 'Full-Stack Web Dev', module: 'Frontend Mastery', dueDate: '2026-04-25', status: 'pending', type: 'assignment' },
-    { id: 3, title: 'Database Design Quiz', course: 'Full-Stack Web Dev', module: 'Data Layer', dueDate: '2026-04-10', status: 'submitted', type: 'quiz', score: 88 },
-    { id: 4, title: 'Git Workflow Exercise', course: 'Full-Stack Web Dev', module: 'Orientation', dueDate: '2026-04-05', status: 'graded', type: 'assignment', score: 92 },
-    { id: 5, title: 'Deploy to Cloud', course: 'Cloud Architecture', module: 'Deployment', dueDate: '2026-04-18', status: 'overdue', type: 'project' },
-  ];
+  const { data, isLoading } = useQuery({
+    queryKey: ['student-assignments'],
+    queryFn: async () => {
+      const response = await api.get('/api/student/dashboard');
+      return response.data;
+    }
+  });
+
+  if (isLoading) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[400px]">
+        <Loader2 className="w-8 h-8 animate-spin text-[var(--brand-500)] mb-4" />
+        <p className="text-[var(--text-secondary)]">Syncing task records...</p>
+      </div>
+    );
+  }
+
+  const enrollments = data?.enrollments || [];
+  
+  // In our simplified logic, each enrollment represents a major task
+  // In a real expanded app, we'd fetch from an /api/assignments endpoint
+  const tasks = enrollments.map((enr: any) => ({
+    id: enr.id,
+    title: enr.course.title,
+    course: enr.course.category,
+    status: enr.status === 'COMPLETED' ? 'graded' : 'pending',
+    type: 'course',
+    progress: enr.progress_percentage,
+    slug: enr.course.slug
+  }));
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case 'pending': return { color: 'bg-blue-500/10 text-blue-500 border-blue-500/20', label: 'Pending' };
+      case 'pending': return { color: 'bg-blue-500/10 text-blue-500 border-blue-500/20', label: 'In Progress' };
       case 'submitted': return { color: 'bg-amber-500/10 text-amber-500 border-amber-500/20', label: 'Submitted' };
-      case 'graded': return { color: 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20', label: 'Graded' };
-      case 'overdue': return { color: 'bg-red-500/10 text-red-500 border-red-500/20', label: 'Overdue' };
+      case 'graded': return { color: 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20', label: 'Finalized' };
+      case 'overdue': return { color: 'bg-red-500/10 text-red-500 border-red-500/20', label: 'Deadline Missed' };
       default: return { color: 'bg-gray-500/10 text-gray-500', label: status };
     }
   };
@@ -26,54 +58,51 @@ export default function AssignmentsPage() {
   return (
     <div className="space-y-8 animate-in fade-in duration-500">
       <div>
-        <h1 className="text-3xl font-bold text-[var(--text-primary)]">Assignments</h1>
-        <p className="text-[var(--text-secondary)] mt-1">Track and submit your assignments and quizzes.</p>
+        <h1 className="text-3xl font-bold text-[var(--text-primary)]">Curriculum Tasks</h1>
+        <p className="text-[var(--text-secondary)] mt-1">Manage your active learning modules and assessments.</p>
       </div>
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatCard label="Total" value={assignments.length} icon="ClipboardList" color="#6366f1" index={0} />
-        <StatCard label="Pending" value={assignments.filter(a => a.status === 'pending').length} icon="Clock" color="#3b82f6" index={1} />
-        <StatCard label="Completed" value={assignments.filter(a => ['submitted', 'graded'].includes(a.status)).length} icon="CheckCircle2" color="#10b981" index={2} />
-        <StatCard label="Overdue" value={assignments.filter(a => a.status === 'overdue').length} icon="AlertCircle" color="#ef4444" index={3} />
+        <StatCard label="Total Modules" value={tasks.length} icon="ClipboardList" color="#6366f1" index={0} />
+        <StatCard label="Pending" value={tasks.filter(a => a.status === 'pending').length} icon="Clock" color="#3b82f6" index={1} />
+        <StatCard label="Finalized" value={tasks.filter(a => a.status === 'graded').length} icon="CheckCircle2" color="#10b981" index={2} />
+        <StatCard label="Success Rate" value={tasks.length > 0 ? "100%" : "0%"} icon="Target" color="#ec4899" index={3} />
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg">All Assignments</CardTitle>
+          <CardTitle className="text-lg">Operational Backlog</CardTitle>
         </CardHeader>
         <CardContent className="space-y-3">
-          {assignments.map((assignment) => {
-            const badge = getStatusBadge(assignment.status);
+          {tasks.length === 0 ? (
+             <div className="text-center py-20 bg-[var(--bg-secondary)] rounded-2xl border-2 border-dashed border-[var(--border-secondary)]">
+                <p className="text-[var(--text-muted)] font-medium">No tasks found in your learning registry.</p>
+             </div>
+          ) : tasks.map((task: any) => {
+            const badge = getStatusBadge(task.status);
             return (
-              <div key={assignment.id} className="flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-xl bg-[var(--bg-secondary)] border border-[var(--border-secondary)] gap-4">
+              <div key={task.id} className="flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-xl bg-[var(--bg-secondary)] border border-[var(--border-secondary)] gap-4">
                 <div className="flex items-center gap-4 min-w-0 flex-1">
-                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${assignment.type === 'quiz' ? 'bg-purple-500/10' : 'bg-[var(--brand-500)]/10'}`}>
-                    {assignment.type === 'quiz' ? (
-                      <FileText className={`w-5 h-5 text-purple-500`} />
-                    ) : (
-                      <ClipboardList className={`w-5 h-5 text-[var(--brand-500)]`} />
-                    )}
+                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 bg-[var(--brand-500)]/10`}>
+                    <FileText className={`w-5 h-5 text-[var(--brand-500)]`} />
                   </div>
                   <div className="min-w-0">
-                    <p className="text-sm font-bold text-[var(--text-primary)] truncate">{assignment.title}</p>
-                    <p className="text-xs text-[var(--text-muted)]">{assignment.course} • {assignment.module}</p>
+                    <p className="text-sm font-bold text-[var(--text-primary)] truncate">{task.title}</p>
+                    <p className="text-xs text-[var(--text-muted)]">{task.course} Integration</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-4">
                   <div className="text-right">
-                    <p className="text-xs text-[var(--text-muted)]">Due: {assignment.dueDate}</p>
-                    {assignment.score !== undefined && (
-                      <p className="text-sm font-bold text-[var(--brand-400)]">{assignment.score}/100</p>
-                    )}
+                    <p className="text-xs text-[var(--text-muted)]">Integrity: {task.progress}%</p>
                   </div>
                   <Badge variant="outline" className={`rounded-lg px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${badge.color}`}>
                     {badge.label}
                   </Badge>
-                  {assignment.status === 'pending' && (
+                  <Link to={`/dashboard/student/learn/${task.slug}`}>
                     <Button variant="outline" size="sm" className="gap-1.5 shrink-0">
-                      <Upload className="w-3.5 h-3.5" /> Submit
+                      <PlayCircle className="w-3.5 h-3.5" /> Continue
                     </Button>
-                  )}
+                  </Link>
                 </div>
               </div>
             );

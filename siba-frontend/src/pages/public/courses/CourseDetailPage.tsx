@@ -93,11 +93,10 @@ export default function CourseDetailPage() {
                    <p className="font-semibold text-[var(--text-primary)]">{course.trainer?.name}</p>
                 </div>
              </div>
-             <div className="flex items-center gap-4">
-                <div className="text-right">
-                  <p className="text-2xl font-bold text-[var(--text-primary)]">
-                    {course.price > 0 ? formatCurrency(course.price) : 'Free'}
-                  </p>
+              <div className="flex items-center gap-4">
+                <div className="text-right hidden md:block">
+                  <p className="text-[10px] font-black text-[var(--text-muted)] uppercase tracking-[0.2em] mb-1">Status</p>
+                  <p className="text-base font-bold text-[var(--brand-500)] uppercase">Open Enrollment</p>
                 </div>
                 <Button 
                    size="lg" 

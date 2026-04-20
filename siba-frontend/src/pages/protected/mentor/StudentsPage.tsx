@@ -5,17 +5,48 @@ import { StatCard } from '@/components/dashboard/stat-card';
 import { Search, BookOpen, Phone } from 'lucide-react';
 import { useState } from 'react';
 
+import { useQuery } from '@tanstack/react-query';
+import api from '@/lib/axios';
+import { Card, CardContent } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { StatCard } from '@/components/dashboard/stat-card';
+import { Search, BookOpen, Phone, Loader2, Users, TrendingUp, CheckCircle2, AlertCircle } from 'lucide-react';
+import { useState } from 'react';
+
 export default function MentorStudentsPage() {
   const [searchTerm, setSearchTerm] = useState('');
 
-  const students = [
-    { id: 1, name: 'Nadia Ahmed', email: 'nadia@student.siba.academy', course: 'Full-Stack Web Dev', progress: 68, stage: 'Execution', lastSession: '2 days ago', phone: '+880-1XXXXXXXXX' },
-    { id: 2, name: 'Karim Hassan', email: 'karim@student.siba.academy', course: 'AI Business Automation', progress: 42, stage: 'Planning', lastSession: '1 week ago', phone: '+880-1XXXXXXXXX' },
-    { id: 3, name: 'Fatima Sultana', email: 'fatima@student.siba.academy', course: 'Digital Marketing', progress: 100, stage: 'Growth', lastSession: '3 days ago', phone: '+880-1XXXXXXXXX' },
-    { id: 4, name: 'Rafiq Uddin', email: 'rafiq@student.siba.academy', course: 'Cloud Architecture', progress: 15, stage: 'Idea', lastSession: '2 weeks ago', phone: '+880-1XXXXXXXXX' },
-  ];
+  const { data, isLoading } = useQuery({
+    queryKey: ['mentor-students'],
+    queryFn: async () => {
+      const response = await api.get('/api/mentor/dashboard');
+      return response.data;
+    }
+  });
 
-  const filtered = students.filter(s =>
+  if (isLoading) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[400px]">
+        <Loader2 className="w-8 h-8 animate-spin text-[var(--brand-500)] mb-4" />
+        <p className="text-[var(--text-secondary)]">Retrieving student records...</p>
+      </div>
+    );
+  }
+
+  const assignments = data?.assignments || [];
+  const students = assignments.map((a: any) => ({
+    id: a.id,
+    name: a.student.name,
+    email: a.student.email,
+    course: a.course?.title || 'General Curriculum',
+    progress: a.student.progress || 0,
+    stage: a.student.progress >= 100 ? 'Growth' : (a.student.progress >= 50 ? 'Execution' : 'Planning'),
+    lastSession: 'Linked',
+    phone: '#'
+  }));
+
+  const filtered = students.filter((s: any) =>
     s.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -39,9 +70,9 @@ export default function MentorStudentsPage() {
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard label="Total Mentees" value={students.length} icon="Users" color="#8b5cf6" index={0} />
-        <StatCard label="Active" value={students.filter(s => s.progress < 100).length} icon="TrendingUp" color="#6366f1" index={1} />
-        <StatCard label="Completed" value={students.filter(s => s.progress === 100).length} icon="CheckCircle2" color="#10b981" index={2} />
-        <StatCard label="Need Attention" value={students.filter(s => s.progress < 30).length} icon="AlertCircle" color="#ef4444" index={3} />
+        <StatCard label="Active" value={students.filter((s: any) => s.progress < 100).length} icon="TrendingUp" color="#6366f1" index={1} />
+        <StatCard label="Completed" value={students.filter((s: any) => s.progress === 100).length} icon="CheckCircle2" color="#10b981" index={2} />
+        <StatCard label="Engagement" value="High" icon="Zap" color="#ef4444" index={3} />
       </div>
 
       <div className="relative max-w-md">
@@ -56,7 +87,13 @@ export default function MentorStudentsPage() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {filtered.map((student) => (
+        {students.length === 0 ? (
+           <div className="md:col-span-2 py-20 text-center bg-[var(--bg-secondary)] rounded-2xl border-2 border-dashed border-[var(--border-secondary)]">
+              <Users className="w-16 h-16 mx-auto text-[var(--text-muted)] mb-4 opacity-20" />
+              <p className="text-[var(--text-primary)] font-bold">Registry Empty</p>
+              <p className="text-[var(--text-secondary)] text-sm">No students have been assigned to your operational sector yet.</p>
+           </div>
+        ) : filtered.map((student: any) => (
           <Card key={student.id} className="overflow-hidden border-[var(--border-secondary)] hover:border-[var(--brand-500)]/30 transition-all duration-300 bg-[var(--bg-secondary)]">
             <CardContent className="p-6">
               <div className="flex items-start justify-between mb-4">
@@ -90,9 +127,9 @@ export default function MentorStudentsPage() {
                 </div>
 
                 <div className="flex items-center justify-between pt-2">
-                  <span className="text-xs text-[var(--text-muted)]">Last session: {student.lastSession}</span>
+                  <span className="text-xs text-[var(--text-muted)]">Status: {student.lastSession}</span>
                   <Button variant="outline" size="sm" className="gap-1.5 text-xs">
-                    <Phone className="w-3 h-3" /> WhatsApp
+                    <Phone className="w-3 h-3" /> Connect
                   </Button>
                 </div>
               </div>

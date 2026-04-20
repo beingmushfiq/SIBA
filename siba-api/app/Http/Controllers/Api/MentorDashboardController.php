@@ -29,12 +29,17 @@ class MentorDashboardController extends Controller
             ->orderBy('scheduled_at', 'asc')
             ->get();
 
+        // Calculate completion rate based on assigned students progress
+        $completionRate = $assignments->count() > 0 
+            ? round($assignments->avg('student.enrollments.*.progress') ?? 0) . '%'
+            : '0%';
+
         return response()->json([
             'metrics' => [
                 ['label' => 'Assigned Students', 'value' => $assignments->count(), 'icon' => 'Users', 'color' => '#6366f1'],
                 ['label' => 'Upcoming Sessions', 'value' => $sessions->count(), 'icon' => 'Video', 'color' => '#10b981'],
-                ['label' => 'Completed Feedbacks', 'value' => 0, 'icon' => 'MessageSquare', 'color' => '#f59e0b'],
-                ['label' => 'Completion Rate', 'value' => '84%', 'icon' => 'GraduationCap', 'color' => '#ec4899'],
+                ['label' => 'Total Students', 'value' => $assignments->count(), 'icon' => 'GraduationCap', 'color' => '#f59e0b'],
+                ['label' => 'Avg Progress', 'value' => $completionRate, 'icon' => 'TrendingUp', 'color' => '#ec4899'],
             ],
             'assignments' => $assignments,
             'sessions' => $sessions

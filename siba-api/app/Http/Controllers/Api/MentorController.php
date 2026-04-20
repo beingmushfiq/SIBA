@@ -21,7 +21,9 @@ class MentorController extends Controller
                 return [
                     'id' => $mentor->id,
                     'name' => $mentor->name,
-                    'role' => $mentor->level . " Operator", // Or use a custom field if added later
+                    'role' => (is_array($mentor->skills) && count($mentor->skills) > 0) 
+                        ? $mentor->skills[0] 
+                        : $mentor->level . " Operator",
                     'image' => $mentor->avatar ?? '/images/mentors/default.jpg',
                     'expertise' => $mentor->skills ?? [],
                     'bio' => $mentor->bio,

@@ -5,6 +5,7 @@ import './index.css'
 import { ThemeProvider } from './components/theme-provider'
 import App from './App.tsx'
 import { registerSW } from 'virtual:pwa-register'
+import { Toaster } from 'react-hot-toast'
 
 // Register service worker
 registerSW({ immediate: true })
@@ -16,6 +17,13 @@ createRoot(document.getElementById('root')!).render(
     <QueryClientProvider client={queryClient}>
       <ThemeProvider defaultTheme="light" storageKey="siba-theme">
         <App />
+        <Toaster 
+          position="top-right" 
+          reverseOrder={false}
+          containerStyle={{
+            zIndex: 99999,
+          }}
+        />
       </ThemeProvider>
     </QueryClientProvider>
   </StrictMode>,

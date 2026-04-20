@@ -9,15 +9,11 @@ import { useState } from 'react';
 export default function EnrollmentsPage() {
   const [searchTerm, setSearchTerm] = useState('');
 
-  const { isLoading } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ['admin-enrollments'],
     queryFn: async () => {
-      try {
-        const response = await api.get('/api/admin/stats');
-        return response.data;
-      } catch {
-        return { metrics: [], recentUsers: [] };
-      }
+      const response = await api.get('/api/admin/enrollments');
+      return response.data;
     }
   });
 
@@ -30,16 +26,9 @@ export default function EnrollmentsPage() {
     );
   }
 
-  const enrollments = [
-    { id: 1, student: 'Nadia Ahmed', course: 'Full-Stack Web Development', status: 'ACTIVE', progress: 68, enrolled: '2026-03-15' },
-    { id: 2, student: 'Karim Hassan', course: 'AI-Powered Business Automation', status: 'ACTIVE', progress: 42, enrolled: '2026-03-20' },
-    { id: 3, student: 'Fatima Sultana', course: 'Digital Marketing Mastery', status: 'COMPLETED', progress: 100, enrolled: '2026-02-10' },
-    { id: 4, student: 'Rafiq Uddin', course: 'Cloud Architecture & DevOps', status: 'ACTIVE', progress: 15, enrolled: '2026-04-01' },
-    { id: 5, student: 'Salma Khatun', course: 'Full-Stack Web Development', status: 'DROPPED', progress: 22, enrolled: '2026-01-25' },
-    { id: 6, student: 'Imran Sheikh', course: 'AI-Powered Business Automation', status: 'ACTIVE', progress: 89, enrolled: '2026-02-28' },
-  ];
+  const enrollments = data?.enrollments || [];
 
-  const filteredEnrollments = enrollments.filter(e =>
+  const filteredEnrollments = enrollments.filter((e: any) =>
     e.student.toLowerCase().includes(searchTerm.toLowerCase()) ||
     e.course.toLowerCase().includes(searchTerm.toLowerCase())
   );

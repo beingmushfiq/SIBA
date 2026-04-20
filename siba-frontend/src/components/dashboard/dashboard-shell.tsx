@@ -34,6 +34,8 @@ import {
   Briefcase,
   TrendingUp,
   MessageSquare,
+  Home,
+  ArrowUpRight,
 } from "lucide-react";
 import { useAuthStore } from "@/store/useAuthStore";
 
@@ -53,6 +55,8 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   Briefcase,
   TrendingUp,
   MessageSquare,
+  Home,
+  ArrowUpRight,
 };
 
 interface DashboardLayoutProps {
@@ -117,6 +121,24 @@ export default function DashboardShell({ children, user }: DashboardLayoutProps)
 
         {/* Navigation */}
         <nav className="flex-1 overflow-y-auto py-4 px-3 space-y-1">
+          <Link
+            to="/"
+            className={cn(
+              "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 mb-6 group/home",
+              "text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] border border-transparent hover:border-[var(--border-primary)]"
+            )}
+          >
+            <Home className="w-5 h-5 shrink-0 group-hover/home:text-[var(--brand-400)] transition-colors" />
+            {!collapsed && (
+              <div className="flex items-center justify-between flex-1">
+                <span>Back to Website</span>
+                <ArrowUpRight className="w-3.5 h-3.5 opacity-0 group-hover/home:opacity-100 transition-opacity" />
+              </div>
+            )}
+          </Link>
+
+          <div className="h-px bg-[var(--border-primary)] mx-2 mb-4 opacity-50" />
+
           {navItems.map((item: any) => {
             const Icon = iconMap[item.icon] || LayoutDashboard;
             const isActive = pathname === item.href || (item.href !== `/dashboard/${user.role.toLowerCase()}` && pathname.startsWith(item.href));
