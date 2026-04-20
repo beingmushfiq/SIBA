@@ -51,9 +51,9 @@ export default function EnrollmentsPage() {
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard label="Total Enrollments" value={enrollments.length} icon="UserCheck" color="#6366f1" index={0} />
-        <StatCard label="Active" value={enrollments.filter(e => e.status === 'ACTIVE').length} icon="Clock" color="#3b82f6" index={1} />
-        <StatCard label="Completed" value={enrollments.filter(e => e.status === 'COMPLETED').length} icon="CheckCircle2" color="#10b981" index={2} />
-        <StatCard label="Avg Progress" value={`${Math.round(enrollments.reduce((s, e) => s + e.progress, 0) / enrollments.length)}%`} icon="BarChart3" color="#f59e0b" index={3} />
+        <StatCard label="Active" value={enrollments.filter((e: any) => e.status === 'ACTIVE').length} icon="Clock" color="#3b82f6" index={1} />
+        <StatCard label="Completed" value={enrollments.filter((e: any) => e.status === 'COMPLETED').length} icon="CheckCircle2" color="#10b981" index={2} />
+        <StatCard label="Avg Progress" value={`${enrollments.length > 0 ? Math.round(enrollments.reduce((s: number, e: any) => s + (e.progress || 0), 0) / enrollments.length) : 0}%`} icon="BarChart3" color="#f59e0b" index={3} />
       </div>
 
       <div className="relative max-w-md">
@@ -73,7 +73,7 @@ export default function EnrollmentsPage() {
         </CardHeader>
         <CardContent>
           <div className="space-y-3">
-            {filteredEnrollments.map((enrollment) => (
+            {filteredEnrollments.map((enrollment: any) => (
               <div key={enrollment.id} className="flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-xl bg-[var(--bg-secondary)] border border-[var(--border-secondary)] gap-4">
                 <div className="flex items-center gap-4 min-w-0 flex-1">
                   <div className="w-10 h-10 rounded-xl bg-[var(--brand-500)]/10 flex items-center justify-center shrink-0">

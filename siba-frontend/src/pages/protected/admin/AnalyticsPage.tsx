@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { StatCard } from '@/components/dashboard/stat-card';
-import { BarChart3, TrendingUp, Zap, Loader2, Users, Target, Clock, Award } from 'lucide-react';
+import { BarChart3, TrendingUp, Zap, Loader2 } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import api from '@/lib/axios';
 
@@ -48,7 +48,7 @@ export default function AdminAnalyticsPage() {
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            {courseCompletionData.map((course) => (
+            {courseCompletionData.map((course: any) => (
               <div key={course.course} className="space-y-2">
                 <div className="flex justify-between items-center">
                   <span className="text-sm text-[var(--text-primary)] font-medium truncate max-w-[60%]">{course.course}</span>

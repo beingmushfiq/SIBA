@@ -12,9 +12,7 @@ import {
   Edit,
   Trash2,
   Lock,
-  X,
-  CheckSquare,
-  Square
+  CheckSquare
 } from 'lucide-react';
 import api from '@/lib/axios';
 import { Card, CardContent } from '@/components/ui/card';
@@ -386,7 +384,7 @@ export default function UsersPage() {
                         </div>
                       </div>
                       {!user.is_active && (
-                        <Badge variant="destructive" className="animate-pulse bg-red-500/20 text-red-500 border-red-500/30">Inactive</Badge>
+                        <Badge variant="danger" className="animate-pulse bg-red-500/20 text-red-500 border-red-500/30">Inactive</Badge>
                       )}
                     </div>
 

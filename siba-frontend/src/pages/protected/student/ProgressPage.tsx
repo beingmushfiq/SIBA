@@ -1,6 +1,8 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { StatCard } from '@/components/dashboard/stat-card';
 import { Target, Zap, BarChart3 } from 'lucide-react';
+import { useQuery } from '@tanstack/react-query';
+import api from '@/lib/axios';
 
 export default function ProgressPage() {
   const { data, isLoading } = useQuery({
@@ -91,7 +93,7 @@ export default function ProgressPage() {
           </CardHeader>
           <CardContent>
             <div className="h-40 flex items-end justify-around gap-3 px-4">
-              {weeklyHours.map((hours, i) => (
+              {weeklyHours.map((_hours, i) => (
                 <div key={i} className="flex-1 flex flex-col items-center gap-2">
                   <span className="text-xs font-semibold text-[var(--text-muted)]">0h</span>
                   <div

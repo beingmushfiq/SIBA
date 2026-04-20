@@ -14,8 +14,7 @@ import {
   BookOpen, 
   CheckCircle2, 
   AlertTriangle,
-  PlusCircle,
-  Calendar as CalendarIcon
+  PlusCircle
 } from 'lucide-react';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';

@@ -6,12 +6,6 @@ import { BookOpen, Clock, Users, ArrowLeft } from "lucide-react";
 import api from '@/lib/axios';
 import { useAuthStore } from '@/store/useAuthStore';
 
-function formatCurrency(amount: number) {
-  return new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-  }).format(amount);
-}
 
 export default function CourseDetailPage() {
   const { slug } = useParams<{ slug: string }>();

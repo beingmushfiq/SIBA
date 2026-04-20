@@ -23,6 +23,7 @@ export default function ProfilePage() {
 
   const handleUpdateProfile = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!user) return;
     setLoading(true);
     try {
       const response = await api.post('/api/user/profile', formData);
@@ -38,6 +39,7 @@ export default function ProfilePage() {
   };
 
   const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!user) return;
     const file = e.target.files?.[0];
     if (!file) return;
 
@@ -125,7 +127,7 @@ export default function ProfilePage() {
                   <Input 
                     id="name" 
                     value={formData.name} 
-                    onChange={(e) => setFormData({...formData, name: e.target.value})}
+                    onChange={(e: any) => setFormData({...formData, name: e.target.value})}
                     placeholder="Enter your name"
                     className="bg-[var(--bg-primary)] border-[var(--border-primary)] focus:ring-[var(--brand-500)]"
                   />
@@ -135,7 +137,7 @@ export default function ProfilePage() {
                   <Input 
                     id="phone" 
                     value={formData.phone} 
-                    onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                    onChange={(e: any) => setFormData({...formData, phone: e.target.value})}
                     placeholder="+1 234 567 890"
                     className="bg-[var(--bg-primary)] border-[var(--border-primary)] focus:ring-[var(--brand-500)]"
                   />
@@ -158,7 +160,7 @@ export default function ProfilePage() {
                 <Textarea 
                   id="bio" 
                   value={formData.bio} 
-                  onChange={(e) => setFormData({...formData, bio: e.target.value})}
+                  onChange={(e: any) => setFormData({...formData, bio: e.target.value})}
                   placeholder="Tell us about yourself..."
                   rows={4}
                   className="bg-[var(--bg-primary)] border-[var(--border-primary)] focus:ring-[var(--brand-500)] resize-none"

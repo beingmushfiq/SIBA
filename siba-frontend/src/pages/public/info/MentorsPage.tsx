@@ -80,7 +80,7 @@ export default function MentorsPage() {
                     </div>
 
                     <div className="flex flex-wrap gap-2">
-                    {mentor.expertise.map(exp => (
+                    {mentor.expertise.map((exp: string) => (
                         <span key={exp} className="px-3 py-1.5 rounded-full bg-[var(--bg-secondary)] border border-[var(--border-primary)] text-[8px] sm:text-[9px] font-black uppercase tracking-wider text-[var(--text-muted)] group-hover:border-[var(--brand-500)]/30 transition-colors">
                         {exp}
                         </span>

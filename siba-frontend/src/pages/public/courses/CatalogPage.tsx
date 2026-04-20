@@ -6,12 +6,6 @@ import { Link } from "react-router-dom";
 import { BookOpen, Users, Layers, Search, ArrowRight } from "lucide-react";
 import api from '@/lib/axios';
 
-function formatCurrency(amount: number) {
-  return new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-  }).format(amount);
-}
 
 const levelColors: Record<string, string> = {
   BEGINNER: "#10b981",

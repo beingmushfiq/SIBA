@@ -5,10 +5,10 @@ import api from '@/lib/axios';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { Button } from '@/components/ui/button';
 import { 
-  ArrowLeft, CheckCircle, Video, FileText, PlayCircle, 
-  Menu, X, HelpCircle, ChevronRight, Award, RotateCcw
+  ArrowLeft, CheckCircle, Video, PlayCircle, 
+  Menu, X, HelpCircle, ChevronRight, Award, RotateCcw,
+  Check, Loader2
 } from 'lucide-react';
-import { Logo } from '@/components/ui/logo';
 import { Badge } from '@/components/ui/badge';
 
 export default function LearningPlatform() {

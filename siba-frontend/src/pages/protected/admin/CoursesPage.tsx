@@ -6,8 +6,8 @@ import { Badge } from '@/components/ui/badge';
 import { StatCard } from '@/components/dashboard/stat-card';
 import { 
   BookOpen, Search, Plus, Loader2, Eye, EyeOff,
-  Users, DollarSign, ChevronRight, BarChart3,
-  Trash2, Edit, Save
+  Users, DollarSign,
+  Trash2
 } from 'lucide-react';
 import { useState } from 'react';
 import { 

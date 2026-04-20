@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Globe, Shield, Bell, Save, Key, Loader2, Camera } from 'lucide-react';
+import { Globe, Shield, Bell, Save, Loader2, Camera } from 'lucide-react';
 import api from '@/lib/axios';
 import toast from 'react-hot-toast';
 

@@ -7,7 +7,13 @@ interface User {
   email: string;
   role: 'STUDENT' | 'TRAINER' | 'ADMIN' | 'MENTOR';
   avatar?: string;
+  avatar_url?: string;
   level: string;
+  bio?: string;
+  phone?: string;
+  created_at?: string;
+  skills?: string[];
+  expertise?: string[];
 }
 
 interface AuthState {
@@ -19,6 +25,7 @@ interface AuthState {
   register: (data: any) => Promise<void>;
   logout: () => Promise<void>;
   checkAuth: () => Promise<void>;
+  setUser: (user: User | null) => void;
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
@@ -26,6 +33,8 @@ export const useAuthStore = create<AuthState>((set) => ({
   isAuthenticated: false,
   isLoading: true,
   error: null,
+  
+  setUser: (user) => set({ user }),
 
   login: async (credentials) => {
     set({ isLoading: true, error: null });

@@ -7,16 +7,12 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { 
   BookOpen, Award, Clock, ArrowRight, PlayCircle, 
-  Download, Wifi, WifiOff, FileText, CheckCircle2 
+  Wifi, WifiOff, CheckCircle2,
+  Zap 
 } from 'lucide-react';
 
 export default function StudentDashboard() {
   const [isOnline, setIsOnline] = useState(navigator.onLine);
-  const [offlineResources] = useState([
-    { id: '1', title: 'Neural Networks Basics', size: '15.4MB', type: 'PDF', downloaded: true },
-    { id: '2', title: 'React Hooks Deep Dive', size: '124MB', type: 'VIDEO', downloaded: true },
-    { id: '3', title: 'CSS Grid Masterclass', size: '45MB', type: 'VIDEO', downloaded: false },
-  ]);
 
   useEffect(() => {
     const handleOnline = () => setIsOnline(true);

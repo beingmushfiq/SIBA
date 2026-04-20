@@ -1,9 +1,8 @@
-import { Link, Navigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useQuery } from '@tanstack/react-query';
 import api from '@/lib/axios';
 import { useAuthStore } from '@/store/useAuthStore';
 import { Button } from "@/components/ui/button";
-import { formatCurrency } from "@/lib/utils";
 import {
   ArrowRight,
   BookOpen,
@@ -70,7 +69,7 @@ const flowSteps = [
 
 
 export default function HomePage() {
-  const { isAuthenticated, user, isLoading } = useAuthStore();
+  const { isLoading } = useAuthStore();
 
   const { data: catalogData } = useQuery({
     queryKey: ['public-courses'],
@@ -350,7 +349,7 @@ export default function HomePage() {
                 </div>
               </div>
             )) : (
-              [1, 2, 3].map((n) => (
+              [1, 2, 3].map((n: number) => (
                 <div key={n} className="glass-card aspect-[16/10] animate-pulse bg-[var(--bg-secondary)] rounded-3xl" />
               ))
             )}
@@ -375,7 +374,7 @@ export default function HomePage() {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
-            {mentorsList.map((mentor) => (
+            {mentorsList.map((mentor: any) => (
               <div key={mentor.name} className="glass-card p-5 sm:p-6 md:p-10 flex flex-col items-center text-center group soft-lift border-white/5">
                 <div className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-[1.25rem] sm:rounded-[1.5rem] md:rounded-[2rem] overflow-hidden mb-4 sm:mb-6 md:mb-8 border-[3px] sm:border-[4px] md:border-[6px] border-[var(--bg-primary)] shadow-2xl group-hover:border-[var(--brand-500)]/30 transition-all duration-500">
                   <img src={mentor.image} alt={mentor.name} className="w-full h-full object-cover group-hover:scale-115 transition-transform duration-700" loading="lazy" />

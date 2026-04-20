@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { StatCard } from '@/components/dashboard/stat-card';
-import { ArrowUpRight, ArrowDownRight, Loader2, Download, FileText } from 'lucide-react';
+import { ArrowUpRight, ArrowDownRight, Loader2, Download } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import api from '@/lib/axios';
 import { Button } from '@/components/ui/button';

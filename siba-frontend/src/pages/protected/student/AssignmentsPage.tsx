@@ -2,16 +2,10 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { StatCard } from '@/components/dashboard/stat-card';
-import { ClipboardList, Upload, FileText } from 'lucide-react';
-
+import { FileText, Loader2, PlayCircle } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import api from '@/lib/axios';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { StatCard } from '@/components/dashboard/stat-card';
-import { ClipboardList, Upload, FileText, Loader2, PlayCircle } from 'lucide-react';
-import { Link } from 'react-router-dom';
 
 export default function AssignmentsPage() {
   const { data, isLoading } = useQuery({
@@ -64,8 +58,8 @@ export default function AssignmentsPage() {
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard label="Total Modules" value={tasks.length} icon="ClipboardList" color="#6366f1" index={0} />
-        <StatCard label="Pending" value={tasks.filter(a => a.status === 'pending').length} icon="Clock" color="#3b82f6" index={1} />
-        <StatCard label="Finalized" value={tasks.filter(a => a.status === 'graded').length} icon="CheckCircle2" color="#10b981" index={2} />
+        <StatCard label="Pending" value={tasks.filter((a: any) => a.status === 'pending').length} icon="Clock" color="#3b82f6" index={1} />
+        <StatCard label="Finalized" value={tasks.filter((a: any) => a.status === 'graded').length} icon="CheckCircle2" color="#10b981" index={2} />
         <StatCard label="Success Rate" value={tasks.length > 0 ? "100%" : "0%"} icon="Target" color="#ec4899" index={3} />
       </div>
 
